@@ -1,0 +1,17 @@
+{
+    "name": "Platron/shtrih-m",
+    "description": "Shtrih-m SDK",
+    "require": {
+        "php": ">=5.3"
+    },
+    "require-dev": {
+		"php": ">=5.6",
+		"phpunit/phpunit": "5.7"
+	},
+	"autoload": {
+		"psr-4": {
+			"Platron\\Shtrihm\\": "src",
+			"Platron\\Shtrihm\\tests\\": "tests"
+		}
+	}
+}
