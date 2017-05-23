@@ -3,7 +3,7 @@
 namespace Platron\Shtrihm\services;
 
 abstract class BaseServiceRequest {
-    const REQUEST_URL = 'https://online.atol.ru/possystem/v3/';
+    const REQUEST_URL = 'https://www.shtrih-m.ru/api/v1/documents/';
     
     /**
 	 * Получить url ждя запроса

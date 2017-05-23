@@ -4,24 +4,22 @@ namespace Platron\Shtrihm\services;
 
 class GetStatusRequest extends BaseServiceRequest{
     
-    /** @var string */
-    protected $groupCode;
-    /** @var string */
-    protected $uuId;
-    /** @var string */
-    protected $token;
+    /** @var int */
+    protected $id;
     
     /**
      * @inheritdoc
      */
     public function getRequestUrl() {
-        return self::REQUEST_URL.$this->groupCode.'/'.$this->uuId.'?tokenid='.$this->token;
+        return self::REQUEST_URL.'status/'.$this->id;
     }
     
-    public function __construct($groupCode, $uuId, $token) {
-        $this->groupCode = $groupCode;
-        $this->uuId = $uuId;
-        $this->token = $token;
+    /**
+     * Id документа, который создавался
+     * @param int $id
+     */
+    public function __construct($id) {
+        $this->id = $id;
     }
     
     public function getParameters() {

@@ -6,7 +6,7 @@ use Platron\Shtrihm\data_objects\ReceiptPosition;
 use Platron\Shtrihm\SdkException;
 
 /**
- * Все парараметры обязательны для заполнения, кроме external_id. Он нужен только для корректировки чека
+ * Все парараметры обязательны для заполнения. Контактные данные требуются - либо email, либо телефон
  */
 class CreateDocumentRequest extends BaseServiceRequest{
     
@@ -15,9 +15,7 @@ class CreateDocumentRequest extends BaseServiceRequest{
     /** @var string тип операции */
     protected $operationType;
     /** @var string */
-    protected $token;
-    /** @var string */
-    protected $paymentAddress;
+    protected $id;
     /** @var string */
     protected $customerEmail;
     /** @var int */
@@ -29,17 +27,13 @@ class CreateDocumentRequest extends BaseServiceRequest{
     /** @var ReceiptPosition[] Позиции в чеке */
     protected $receiptPositions;
     /** @var string */
-    protected $externalId;
-    /** @var string */
-    protected $sno;
+    protected $taxatitionSystem;
     
     const 
-        OPERATION_TYPE_SELL = 'sell', // Приход
-        OPERATION_TYPE_SELL_REFUND = 'sell_refund', // Возврат прихода
-        OPERATION_TYPE_SELL_CORRECTION = 'sell_correction', // Коррекция прихода
-        OPERATION_TYPE_BUY = 'buy', // Расход
-        OPERATION_TYPE_BUY_REFUND = 'buy_refund', // Возврат расхода
-        OPERATION_TYPE_BUY_CORRECTION = 'buy_correction'; // Коррекция расхода
+        OPERATION_TYPE_SELL = 1, // Приход
+        OPERATION_TYPE_SELL_REFUND = 2, // Возврат прихода
+        OPERATION_TYPE_BUY = 3, // Расход
+        OPERATION_TYPE_BUY_REFUND = 4; // Возврат расхода
     
     const 
         PAYMENT_TYPE_CASH = 0,
@@ -49,30 +43,20 @@ class CreateDocumentRequest extends BaseServiceRequest{
         PAYMNET_TYPE_OTHER = 4;
     
     const 
-        SNO_OSN = 'osn',
-        SNO_USN_INCOME = 'usn_income',
-        SNO_USN_INCOME_OUTCOME = 'usn_income_outcome',
-        SNO_ENDV = 'envd',
-        SNO_ESN = 'esn',
-        SNO_PATENT = 'patent';
+        TAXATITION_SYSTEM_OSN = 0, // общая СН
+        TAXATITION_SYSTEM_USN_INCOME = 1, // упрощенная СН (доходы)
+        TAXATITION_SYSTEM_USN_INCOME_OUTCOME = 2, // упрощенная СН (доходы минус расходы)
+        TAXATITION_SYSTEM_ENDV = 3, // единый налог на вмененный доход
+        TAXATITION_SYSTEM_ESN = 4, // единый сельскохозяйственный налог
+        TAXATITION_SYSTEM_PATENT = 5; // патентная СН
     
     /**
      * @inheritdoc
      */
     public function getRequestUrl() {
-        return self::REQUEST_URL.$this->groupCode.'/'.$this->operationType.'?tokenid='.$this->token;
+        return self::REQUEST_URL;
     }
-    
-    /**
-     * Добавить адрес магазина для оплаты (сайт)
-     * @param string $address
-     * @return CreateDocumentRequest
-     */
-    public function addMerchantAddress($address){
-        $this->paymentAddress = $address;
-        return $this;
-    }
-    
+        
     /**
      * Установить email покупателя
      * @param string $email
@@ -129,36 +113,26 @@ class CreateDocumentRequest extends BaseServiceRequest{
     }
     
     /**
-     * Установить номер чека, если это коррекция
-     * @param string $externalId
-     * @return CreateDocumentRequest
-     */
-    public function addExternalId($externalId){
-        $this->externalId = $externalId;
-        return $this;
-    }
-    
-    /**
-     * Добавить SNO. Если у организации один тип - оно не обязательное. Из констант
-     * @param string $sno
+     * Добавить SNO. Из констант
+     * @param string $taxatitionSystem
      * @throws SdkException
      * @return CreateDocumentRequest
      */
-    public function addSno($sno){
-        if(!in_array($sno, $this->getSnoTypes())){
+    public function addTaxatitionSystem($taxatitionSystem){
+        if(!in_array($taxatitionSystem, $this->getSnoTypes())){
             throw new SdkException('Wrong sno type');
         }
         
-        $this->sno = $sno;
+        $this->taxatitionSystem = $taxatitionSystem;
         return $this;
     }
 
     /**
-     * @param string $token Токен из запроса получения токена
+     * @param int $id Идентификатор заказа
      * @return CreateDocumentRequest
      */
-    public function __construct($token) {
-        $this->token = $token;
+    public function __construct($id) {
+        $this->id = $id;
         return $this;
     }
     
@@ -188,6 +162,20 @@ class CreateDocumentRequest extends BaseServiceRequest{
     }
     
     public function getParameters() {
+        $params = [
+            'Id' => $this->id,
+            'INN' => $this->inn,
+            'Content' => [
+                'Type' => $this->operationType,
+                'Positions' => [],
+                'CheckClose' => [
+                    'Type' => $this->paymentType,
+                ],
+                'TaxationSystem' => $this->taxatitionSystem,
+            ],
+            'CustomerContact' => ($this->customerEmail) ? $this->customerEmail : $this->customerPhone,
+        ];
+        
         $params = [
             'timestamp' => date('d.m.Y H:i:s'),
             'service' => [
@@ -220,10 +208,8 @@ class CreateDocumentRequest extends BaseServiceRequest{
     protected function getOperationTypes(){
         return [
             self::OPERATION_TYPE_BUY,
-            self::OPERATION_TYPE_BUY_CORRECTION,
             self::OPERATION_TYPE_BUY_REFUND,
             self::OPERATION_TYPE_SELL,
-            self::OPERATION_TYPE_SELL_CORRECTION,
             self::OPERATION_TYPE_SELL_REFUND,
         ];
     }
@@ -240,12 +226,12 @@ class CreateDocumentRequest extends BaseServiceRequest{
     
     protected function getSnoTypes(){
         return [
-            self::SNO_ENDV,
-            self::SNO_ESN,
-            self::SNO_OSN,
-            self::SNO_PATENT,
-            self::SNO_USN_INCOME,
-            self::SNO_USN_INCOME_OUTCOME,
+            self::TAXATITION_SYSTEM_ENDV,
+            self::TAXATITION_SYSTEM_ESN,
+            self::TAXATITION_SYSTEM_OSN,
+            self::TAXATITION_SYSTEM_PATENT,
+            self::TAXATITION_SYSTEM_USN_INCOME,
+            self::TAXATITION_SYSTEM_USN_INCOME_OUTCOME,
         ];
     }
 }

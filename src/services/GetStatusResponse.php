@@ -2,42 +2,59 @@
 
 namespace Platron\Shtrihm\services;
 
+use Platron\Shtrihm\clients\iClient;
+use stdClass;
+
 class GetStatusResponse extends BaseServiceResponse {
     
-    const STATUS_DONE = 'done';
+    const 
+        HTTP_CODE_OK = 200,
+        HTTP_CODE_WAIT = 202;
+    
+    const 
+        STATUS_DONE = 'ok',
+        STATUS_WAIT = 'wait';
     
     /** @var string */
     public $status;
-    /** @var float */
-    public $total;
-    /** @var int */
-    public $fn_number;
-    /** @var int */
-    public $shift_number;
     /** @var string */
-    public $receipt_datetime;
-    /** @var int */
-    public $fiscal_receipt_number;
-    /** @var int */
-    public $fiscal_document_number;
+    public $DeviceSN;
     /** @var string */
-    public $ecr_registration_number;
+    public $DeviceRN;
     /** @var int */
-    public $fiscal_document_attribute;
+    public $FSNumber;
+    /** @var string */
+    public $OFDName;
+    /** @var string */
+    public $OFDWebsite;
+    /** @var int */
+    public $OFDINN;
+    /** @var string */
+    public $FNSWebsite;
+    /** @var int */
+    public $DocumentNumber;
+    /** @var int */
+    public $ShiftNumber;
+    /** @var int */
+    public $DocumentIndex;
+    /** @var int */
+    public $ProcessedAt;
+    /** @var int */
+    public $FP;
     
     /**
      * @inheritdoc
      */
-    public function __construct(array $response) {
+    public function __construct(iClient $client, stdClass $response) {
         
-        if(!empty($response->error->code)){
-            $this->errorCode = $response->error->code;
-            $this->errorDescription = $response->error->text;            
+        if(!in_array($client->getLastHttpCode(), [self::HTTP_CODE_OK, self::HTTP_CODE_WAIT])){
+            $this->errorCode = $client->getLastHttpCode();         
         }
         
-        if($response['status'] == self::STATUS_DONE ){
+        if($client->getLastHttpCode() == self::HTTP_CODE_OK ){
             $this->status = self::STATUS_DONE;
-            parent::__construct($response->payload);
+            parent::__construct($response);
+            parent::__construct($response->Content);
         }
         else {
             $this->status = $response->status;

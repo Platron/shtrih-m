@@ -11,4 +11,10 @@ interface iClient {
      * @param \Platron\Shtrihm\BaseService $service
      */
     public function sendRequest(BaseServiceRequest $service);
+    
+    /**
+     * Получить последний http ответ
+     * @return int
+     */
+    public function getLastHttpCode();
 }
