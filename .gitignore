@@ -13,3 +13,4 @@ composer.phar
 # Merchant settings for integration tests
 /tests/integration/MerchantSettings.php
 /tests/integration/merchant_data/*
+!/tests/integration/merchant_data/.gitignore
