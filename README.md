@@ -3,6 +3,7 @@ Platron Shtrih-m SDK
 ## Установка
 
 Проект предполагает через установку с использованием composer
+<pre><code>composer require platron/shtrih-m</pre></code>
 
 ## Тесты
 Для работы тестов необходим PHPUnit, для установки необходимо выполнить команду
