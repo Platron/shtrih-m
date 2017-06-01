@@ -2,7 +2,6 @@
 
 namespace Platron\Shtrihm\services;
 
-use Platron\Shtrihm\clients\iClient;
 use stdClass;
 
 class GetStatusResponse extends BaseServiceResponse {
@@ -18,43 +17,41 @@ class GetStatusResponse extends BaseServiceResponse {
     /** @var string */
     public $status;
     /** @var string */
-    public $DeviceSN;
+    public $deviceSN;
     /** @var string */
-    public $DeviceRN;
+    public $deviceRN;
     /** @var int */
-    public $FSNumber;
+    public $fsNumber;
     /** @var string */
-    public $OFDName;
+    public $ofdName;
     /** @var string */
-    public $OFDWebsite;
+    public $ofdWebsite;
     /** @var int */
-    public $OFDINN;
+    public $ofdinn;
     /** @var string */
-    public $FNSWebsite;
+    public $fnsWebsite;
     /** @var int */
-    public $DocumentNumber;
+    public $documentNumber;
     /** @var int */
-    public $ShiftNumber;
+    public $shiftNumber;
     /** @var int */
-    public $DocumentIndex;
+    public $documentIndex;
     /** @var int */
-    public $ProcessedAt;
+    public $processedAt;
     /** @var int */
-    public $FP;
+    public $fp;
     
     /**
      * @inheritdoc
      */
-    public function __construct(iClient $client, stdClass $response) {
-        
-        if(!in_array($client->getLastHttpCode(), [self::HTTP_CODE_OK, self::HTTP_CODE_WAIT])){
-            $this->errorCode = $client->getLastHttpCode();         
+    public function __construct($httpCode, stdClass $response) {
+        if(!in_array($httpCode, [self::HTTP_CODE_OK, self::HTTP_CODE_WAIT])){
+            $this->errorCode = $httpCode;         
         }
         
-        if($client->getLastHttpCode() == self::HTTP_CODE_OK ){
+        if($httpCode == self::HTTP_CODE_OK ){
             $this->status = self::STATUS_DONE;
-            parent::__construct($response);
-            parent::__construct($response->Content);
+            parent::__construct($httpCode, $response);
         }
         else {
             $this->status = $response->status;

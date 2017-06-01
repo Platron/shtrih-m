@@ -6,20 +6,23 @@ class GetStatusRequest extends BaseServiceRequest{
     
     /** @var int */
     protected $id;
+    /** @var int */
+    protected $inn;
     
     /**
      * @inheritdoc
      */
     public function getRequestUrl() {
-        return self::REQUEST_URL.'status/'.$this->id;
+        return self::REQUEST_URL.$this->inn.'/status/'.$this->id;
     }
     
     /**
-     * Id документа, который создавался
-     * @param int $id
+     * @param int $inn ИНН
+     * @param int $id ID созданного документа
      */
-    public function __construct($id) {
+    public function __construct($inn, $id) {
         $this->id = $id;
+        $this->inn = $inn;
     }
     
     public function getParameters() {

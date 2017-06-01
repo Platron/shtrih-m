@@ -162,44 +162,28 @@ class CreateDocumentRequest extends BaseServiceRequest{
     }
     
     public function getParameters() {
+        $totalAmount = 0;
+        $items = [];
+        foreach($this->receiptPositions as $receiptPosition){
+            $totalAmount += $receiptPosition->getPositionSum() * $receiptPosition->getPositionQuantity();
+            $items[] = $receiptPosition->getParameters();
+        }
+        
         $params = [
             'Id' => $this->id,
             'INN' => $this->inn,
             'Content' => [
                 'Type' => $this->operationType,
-                'Positions' => [],
+                'Positions' => $items,
                 'CheckClose' => [
-                    'Type' => $this->paymentType,
+                    'Payments' => [[
+                        'Type' => $this->paymentType,
+                        'Amount' => $totalAmount,
+                    ]],
+                    'TaxationSystem' => $this->taxatitionSystem,
                 ],
-                'TaxationSystem' => $this->taxatitionSystem,
+                'CustomerContact' => ($this->customerEmail) ? $this->customerEmail : $this->customerPhone,
             ],
-            'CustomerContact' => ($this->customerEmail) ? $this->customerEmail : $this->customerPhone,
-        ];
-        
-        $params = [
-            'timestamp' => date('d.m.Y H:i:s'),
-            'service' => [
-                'inn' => $this->inn,
-                'callback_url' => '',
-                'payment_address' => $this->paymentAddress,
-            ],
-            'attributes' => [
-                'email' => $this->customerEmail,
-                'phone' => $this->customerPhone,
-            ],
-            'external_id' => $this->externalId,
-        ];
-        
-        $totalAmount = 0;
-        foreach($this->receiptPositions as $receiptPosition){
-            $totalAmount += $receiptPosition->getPositionSum();
-            $params['items'][] = $receiptPosition->getParameters();
-        }
-        
-        $params['total'] = $totalAmount;
-        $params['payments'] = [
-            'sum' => $totalAmount,
-            'type' => $this->paymentType,
         ];
         
         return $params;

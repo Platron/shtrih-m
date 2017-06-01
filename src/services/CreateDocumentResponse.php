@@ -2,7 +2,6 @@
 
 namespace Platron\Shtrihm\services;
 
-use Platron\Shtrihm\clients\iClient;
 use Platron\Shtrihm\services\BaseServiceResponse;
 use stdClass;
 
@@ -19,9 +18,10 @@ class CreateDocumentResponse extends BaseServiceResponse {
     /**
      * @inheritdoc
      */    
-    public function __construct(iClient $client, stdClass $response) {
-        if($client->getLastHttpCode() != self::HTTP_CODE_OK){
-            $this->errorCode = $client->getLastHttpCode();
+    public function __construct($httpCode, stdClass $response) {
+        if($httpCode != self::HTTP_CODE_OK){
+            $this->errorCode = $httpCode;
         }
+        parent::__construct($httpCode, $response);
     }
 }

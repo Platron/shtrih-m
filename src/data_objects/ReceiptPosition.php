@@ -15,13 +15,13 @@ class ReceiptPosition extends BaseDataObject{
         TAX_VAT118 = 3;
     
     /** @var string */
-    protected $tax;
+    protected $Tax;
     /** @var string */
-    protected $text;
+    protected $Text;
     /** @var float */
-    protected $price;
+    protected $Price;
     /** @var int */
-    protected $quantity;
+    protected $Quantity;
     
     /**
      * @param type $name Описание товара
@@ -35,10 +35,10 @@ class ReceiptPosition extends BaseDataObject{
             throw new SdkException('Wrong vat');
         }
         
-        $this->text = $name;
-        $this->price = $price;
-        $this->quantity = $quantity;
-        $this->tax = $vat;
+        $this->Text = $name;
+        $this->Price = $price;
+        $this->Quantity = $quantity;
+        $this->Tax = $vat;
     }
     
     /**
@@ -46,7 +46,15 @@ class ReceiptPosition extends BaseDataObject{
      * @return float
      */
     public function getPositionSum(){
-        return $this->price;
+        return $this->Price;
+    }
+    
+    /**
+     * Получить количество позиции
+     * @return int
+     */
+    public function getPositionQuantity(){
+        return $this->Quantity;
     }
     
     /**

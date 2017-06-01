@@ -2,22 +2,27 @@
 
 namespace Platron\Shtrihm\services;
 
-use Platron\Shtrihm\clients\iClient;
 use stdClass;
 
 abstract class BaseServiceResponse {
     
     /** @var int */
     protected $errorCode;
-    /** @var int HTTP code */
-    protected $httpCode;
+    
+    /** @var stdClass */
+    protected $response;
     
     /**
-     * @param iClient $client
+     * @param int $httpCode
      * @param stdClass $response
      */
-    public function __construct(iClient $client, stdClass $response) {
-        $this->client = $client->getLastHttpCode();
+    public function __construct($httpCode, stdClass $response) {
+        $this->response = $response;
+        foreach (get_object_vars($this) as $name => $value) {
+			if (!empty($response->$name)) {
+				$this->$name = $response->$name;
+			}
+		}
     }
     
     /**
@@ -47,6 +52,6 @@ abstract class BaseServiceResponse {
      * @return string
      */
     public function getErrorDescription(){
-        return 'Failed with http code '.$this->errorCode;
+        return implode(', ', $this->response->errors);
     }
 }

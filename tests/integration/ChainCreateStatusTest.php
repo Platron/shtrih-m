@@ -12,8 +12,8 @@ use Platron\Shtrihm\services\GetStatusResponse;
 class ChainCreateStatusTest extends IntegrationTestBase {
     public function testChainCreateStatus(){
         $transactionId = time();
-        $client = new PostClient($this->secretKey);
-        
+        $client = new PostClient($this->secretKeyPath, $this->keyPassword, $this->certPath, $this->signedKeyPath);
+                
         $receiptPosition = new ReceiptPosition('test product', 100.00, 2, ReceiptPosition::TAX_VAT10);
         
         $createDocumentService = (new CreateDocumentRequest($transactionId))
@@ -25,12 +25,14 @@ class ChainCreateStatusTest extends IntegrationTestBase {
             ->addPaymentType(CreateDocumentRequest::PAYMENT_TYPE_ELECTRON)
             ->addTaxatitionSystem(CreateDocumentRequest::TAXATITION_SYSTEM_ESN)
             ->addReceiptPosition($receiptPosition);
-        $createDocumentResponse = new CreateDocumentResponse($client->sendRequest($createDocumentService));
+        $responseCreate = $client->sendRequest($createDocumentService);
+        $createDocumentResponse = new CreateDocumentResponse($client->getLastHttpCode(), $responseCreate);
         
         $this->assertTrue($createDocumentResponse->isValid());
         
-        $getStatusServise = new GetStatusRequest($transactionId);
-        $getStatusResponse = new GetStatusResponse($client->sendRequest($getStatusServise));
+        $getStatusServise = new GetStatusRequest($this->inn, $transactionId);
+        $responseGetStatus = $client->sendRequest($getStatusServise);
+        $getStatusResponse = new GetStatusResponse($client->getLastHttpCode(), $responseGetStatus);
         
         $this->assertTrue($getStatusResponse->isValid());
     }
