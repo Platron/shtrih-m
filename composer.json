@@ -1,5 +1,5 @@
 {
-    "name": "platron/shtrih-m",
+    "name": "payprocessing/shtrih-m",
     "description": "Shtrih-m SDK",
     "require": {
         "php": ">=5.3",
