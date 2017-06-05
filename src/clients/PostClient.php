@@ -54,7 +54,7 @@ class PostClient implements iClient {
     public function sendRequest(BaseServiceRequest $service) {       
         $requestParameters = $service->getParameters();
         $requestUrl = $service->getRequestUrl();
-
+        
         $curlHttpHeaders = array(
             'X-Signature: '.$this->getSignBase64(json_encode($requestParameters)),
             'Content-Type: application/json',
@@ -74,17 +74,17 @@ class PostClient implements iClient {
         curl_setopt($curl, CURLOPT_HTTPHEADER, $curlHttpHeaders);
         
         $response = curl_exec($curl);
-
+        $this->lastHttpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        
         if($this->logger){
             $this->logger->log(self::LOG_LEVEL, 'Requested url '.$requestUrl.' params '. json_encode($requestParameters));
             $this->logger->log(self::LOG_LEVEL, 'Response '.$response);
+            $this->logger->log(self::LOG_LEVEL, 'Response HTTP code '.$this->lastHttpCode);
         }
         	
 		if(curl_errno($curl)){
 			throw new SdkException(curl_error($curl), curl_errno($curl));
 		}
-
-        $this->lastHttpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
 		return $response ? json_decode($response) : new stdClass();
     }

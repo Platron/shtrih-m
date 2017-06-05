@@ -52,6 +52,6 @@ abstract class BaseServiceResponse {
      * @return string
      */
     public function getErrorDescription(){
-        return implode(', ', !empty($this->response) ? $this->response->errors : 'Error with code '.$this->errorCode);
+        return !empty($this->response->errors) ? implode(', ', $this->response->errors) : 'Error with code '.$this->errorCode;
     }
 }
