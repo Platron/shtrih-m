@@ -9,9 +9,6 @@ class CreateDocumentResponse extends BaseServiceResponse {
     
     const HTTP_CODE_OK = 201;
     
-    /** @var string Уникальный идентификатор */
-    public $uuid;
-    
     /** @var string */
     public $status;
     
