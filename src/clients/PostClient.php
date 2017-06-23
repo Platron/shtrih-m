@@ -69,8 +69,8 @@ class PostClient implements iClient {
         curl_setopt($curl, CURLOPT_SSLKEY, $this->secretKeyPath);
         curl_setopt($curl, CURLOPT_SSLKEYPASSWD, $this->keyPassword);
         curl_setopt($curl, CURLOPT_SSLCERT, $this->certPath);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false); 
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true); 
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, true);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $curlHttpHeaders);
         
         $response = curl_exec($curl);
