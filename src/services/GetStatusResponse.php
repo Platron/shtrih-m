@@ -12,7 +12,8 @@ class GetStatusResponse extends BaseServiceResponse {
     
     const 
         STATUS_DONE = 'ok',
-        STATUS_WAIT = 'wait';
+        STATUS_WAIT = 'wait',
+        STATUS_ERROR = 'error';
     
     /** @var string */
     public $status;
@@ -45,16 +46,16 @@ class GetStatusResponse extends BaseServiceResponse {
      * @inheritdoc
      */
     public function __construct($httpCode, stdClass $response) {
-        if(!in_array($httpCode, [self::HTTP_CODE_OK, self::HTTP_CODE_WAIT])){
-            $this->errorCode = $httpCode;         
-        }
-        
         if($httpCode == self::HTTP_CODE_OK ){
             $this->status = self::STATUS_DONE;
             parent::__construct($httpCode, $response);
         }
+        elseif($httpCode == self::HTTP_CODE_WAIT) {
+            $this->status = self::STATUS_WAIT;
+        }
         else {
-            $this->status = $response->status;
+            $this->errorCode = $httpCode;   
+            $this->status = self::STATUS_ERROR;
         }
     }
     
