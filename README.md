@@ -7,7 +7,7 @@ Platron Shtrih-m SDK
 
 ## Тесты
 Для работы тестов необходим PHPUnit, для установки необходимо выполнить команду
-```
+```sh
 composer install
 ```
 Для того, чтобы запустить интеграционные тесты нужно скопировать файл tests/integration/MerchantSettingsSample.php удалив 
