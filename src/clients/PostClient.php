@@ -47,15 +47,17 @@ class PostClient implements iClient {
      */
     public function setLogger(LoggerInterface $logger){
         $this->logger = $logger;
-        return self;
+        return $this;
     }
     
     /**
      * Установка максимального времени ожидания
      * @param int $connectionTimeout
+     * @return self
      */
     public function setConnectionTimeout($connectionTimeout){
         $this->connectionTimeout = $connectionTimeout;
+        return $this;
     }
     
     /**
