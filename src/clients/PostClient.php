@@ -26,6 +26,8 @@ class PostClient implements iClient {
     protected $lastHttpCode;
     /** @var LoggerInterface */
     protected $logger;
+    /** @var int */
+    protected $connectionTimeout = 30;
     
     /**
      * Секретный ключ для подписи запросов
@@ -46,6 +48,14 @@ class PostClient implements iClient {
     public function setLogger(LoggerInterface $logger){
         $this->logger = $logger;
         return self;
+    }
+    
+    /**
+     * Установка максимального времени ожидания
+     * @param int $connectionTimeout
+     */
+    public function setConnectionTimeout($connectionTimeout){
+        $this->connectionTimeout = $connectionTimeout;
     }
     
     /**
@@ -72,6 +82,7 @@ class PostClient implements iClient {
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true); 
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, true);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $curlHttpHeaders);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->connectionTimeout);
         
         $response = curl_exec($curl);
         $this->lastHttpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
