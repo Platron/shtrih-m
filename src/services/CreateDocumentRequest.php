@@ -36,11 +36,22 @@ class CreateDocumentRequest extends BaseServiceRequest{
         OPERATION_TYPE_BUY_REFUND = 4; // Возврат расхода
     
     const 
-        PAYMENT_TYPE_CASH = 0,
-        PAYMENT_TYPE_ELECTRON = 1,
-        PAYMNET_TYPE_PRE_PAID = 2,
-        PAYMNET_TYPE_CREDIT = 3,
-        PAYMNET_TYPE_OTHER = 4;
+        PAYMENT_TYPE_CASH = 1,
+        PAYMENT_TYPE_MIR = 2,
+        PAYMNET_TYPE_VISA = 3,
+        PAYMNET_TYPE_MASTERCARD = 4,
+        PAYMNET_TYPE_ADDITIONAL_1 = 5,
+        PAYMNET_TYPE_ADDITIONAL_2 = 6,
+        PAYMNET_TYPE_ADDITIONAL_3 = 7,
+        PAYMNET_TYPE_ADDITIONAL_4 = 8,
+        PAYMNET_TYPE_ADDITIONAL_5 = 9,
+        PAYMNET_TYPE_ADDITIONAL_6 = 10,
+        PAYMNET_TYPE_ADDITIONAL_7 = 11,
+        PAYMNET_TYPE_ADDITIONAL_8 = 12,
+        PAYMNET_TYPE_ADDITIONAL_9 = 13,
+        PAYMNET_TYPE_PRE_PAID = 14,
+        PAYMNET_TYPE_CREDIT = 15,
+        PAYMNET_TYPE_OTHER = 16;
     
     const 
         TAXATITION_SYSTEM_OSN = 0, // общая СН
