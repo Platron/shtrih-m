@@ -1,6 +1,6 @@
 {
     "name": "payprocessing/shtrih-m",
-    "description": "Shtrih-m SDK",
+    "description": "Shtrih-m SDK (OrangeData, PayKiosk)",
     "require": {
         "php": ">=5.3",
         "psr/log": "1.0.2",
