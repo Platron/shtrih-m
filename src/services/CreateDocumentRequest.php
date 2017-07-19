@@ -212,10 +212,21 @@ class CreateDocumentRequest extends BaseServiceRequest{
     protected function getPaymentTypes(){
         return [
             self::PAYMENT_TYPE_CASH,
-            self::PAYMENT_TYPE_ELECTRON,
+            self::PAYMENT_TYPE_MIR,
+            self::PAYMNET_TYPE_VISA,
+            self::PAYMNET_TYPE_MASTERCARD,
+            self::PAYMNET_TYPE_ADDITIONAL_1,
+            self::PAYMNET_TYPE_ADDITIONAL_2,
+            self::PAYMNET_TYPE_ADDITIONAL_3,
+            self::PAYMNET_TYPE_ADDITIONAL_4,
+            self::PAYMNET_TYPE_ADDITIONAL_5,
+            self::PAYMNET_TYPE_ADDITIONAL_6,
+            self::PAYMNET_TYPE_ADDITIONAL_7,
+            self::PAYMNET_TYPE_ADDITIONAL_8,
+            self::PAYMNET_TYPE_ADDITIONAL_9,
+            self::PAYMNET_TYPE_PRE_PAID,
             self::PAYMNET_TYPE_CREDIT,
             self::PAYMNET_TYPE_OTHER,
-            self::PAYMNET_TYPE_PRE_PAID,
         ];
     }
     
