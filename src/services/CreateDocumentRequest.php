@@ -28,6 +28,8 @@ class CreateDocumentRequest extends BaseServiceRequest{
     protected $receiptPositions;
     /** @var string */
     protected $taxatitionSystem;
+    /** @var integer */
+    protected $partnerCode;
     
     const 
         OPERATION_TYPE_SELL = 1, // Приход
@@ -172,6 +174,14 @@ class CreateDocumentRequest extends BaseServiceRequest{
         return $this;
     }
     
+    /**
+     * Добавить код партнера
+     * @param integer $partnerCode
+     */
+    public function addPartnerCode($partnerCode){
+        $this->partnerCode = $partnerCode;
+    }
+    
     public function getParameters() {
         $totalAmount = 0;
         $items = [];
@@ -183,6 +193,7 @@ class CreateDocumentRequest extends BaseServiceRequest{
         $params = [
             'Id' => $this->id,
             'INN' => $this->inn,
+            'key' => $this->partnerCode,
             'Content' => [
                 'Type' => $this->operationType,
                 'Positions' => $items,
