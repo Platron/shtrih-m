@@ -177,9 +177,11 @@ class CreateDocumentRequest extends BaseServiceRequest{
     /**
      * Добавить код партнера
      * @param integer $partnerCode
+     * @return CreateDocumentRequest
      */
     public function addPartnerCode($partnerCode){
         $this->partnerCode = $partnerCode;
+        return $this;
     }
     
     public function getParameters() {
