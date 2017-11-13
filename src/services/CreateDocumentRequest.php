@@ -196,6 +196,7 @@ class CreateDocumentRequest extends BaseServiceRequest{
             'Id' => $this->id,
             'INN' => $this->inn,
             'key' => $this->partnerCode,
+            'Group' => $this->groupCode,
             'Content' => [
                 'Type' => $this->operationType,
                 'Positions' => $items,
