@@ -7,11 +7,12 @@ use Platron\Shtrihm\clients\iClient;
 use Platron\Shtrihm\SdkException;
 use Platron\Shtrihm\services\BaseServiceRequest;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use stdClass;
 
 class PostClient implements iClient {
     
-    const LOG_LEVEL = 0;
+    const LOG_LEVEL = LogLevel::INFO;
     
     /** @var string путь до приватного ключа */
     protected $secretKeyPath;
