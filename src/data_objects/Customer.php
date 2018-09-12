@@ -68,7 +68,7 @@ class Customer extends BaseDataObject
 			'CustomerContact' => $this->email ? $this->email : $this->phone,
 			'customer' => $this->name,
 			'customerINN' => $this->inn,
-			'additionalUserAttribute' => $this->additionalAttribute->getParameters(),
+			'additionalUserAttribute' => $this->additionalAttribute ? $this->additionalAttribute->getParameters() : null,
 		];
 	}
 }

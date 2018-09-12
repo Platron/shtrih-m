@@ -2,6 +2,7 @@
 
 namespace Platron\Shtrihm\data_objects;
 
+use Platron\Shtrihm\handbooks\AgentTypes;
 
 class Agent extends BaseDataObject
 {

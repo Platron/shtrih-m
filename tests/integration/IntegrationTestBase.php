@@ -2,8 +2,6 @@
 
 namespace Platron\Shtrihm\tests\integration;
 
-use Platron\Shtrihm\tests\integration\MerchantSettings;
-
 class IntegrationTestBase extends \PHPUnit_Framework_TestCase {
 
     /** @var int */

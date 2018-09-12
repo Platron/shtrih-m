@@ -149,7 +149,7 @@ class ReceiptPosition extends BaseDataObject{
 		$parameters['agentInfo'] = $this->agent->getParameters();
 
 		unset($parameters['supplier']);
-		$parameters['supplierINN'] = $this->supplier->getType();
+		$parameters['supplierINN'] = $this->supplier->getInn();
 		$parameters['supplierInfo'] = $this->supplier->getParameters();
 
 		return $parameters;

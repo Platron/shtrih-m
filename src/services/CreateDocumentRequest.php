@@ -2,11 +2,9 @@
 
 namespace Platron\Shtrihm\services;
 
-use Platron\Shtrihm\data_objects\Agent;
 use Platron\Shtrihm\data_objects\Customer;
 use Platron\Shtrihm\data_objects\Payment;
 use Platron\Shtrihm\data_objects\ReceiptPosition;
-use Platron\Shtrihm\data_objects\Settlement;
 use Platron\Shtrihm\handbooks\OperationType;
 use Platron\Shtrihm\handbooks\TaxatitionSystem;
 
@@ -49,7 +47,7 @@ class CreateDocumentRequest extends BaseServiceRequest{
      * @inheritdoc
      */
     public function getRequestUrl() {
-        return self::REQUEST_URL;
+        return $this->getBaseUrl();
     }
 
 	/**
@@ -159,8 +157,13 @@ class CreateDocumentRequest extends BaseServiceRequest{
             ],
         ];
 
-		$params += $this->customer->getParameters();
-		$params += $this->settlement->getParameters();
+        if($this->customer) {
+			$params += $this->customer->getParameters();
+		}
+
+		if($this->settlement){
+			$params += $this->settlement->getParameters();
+		}
         
         return $params;
     }

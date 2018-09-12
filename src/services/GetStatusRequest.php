@@ -13,7 +13,7 @@ class GetStatusRequest extends BaseServiceRequest{
      * @inheritdoc
      */
     public function getRequestUrl() {
-        return self::REQUEST_URL.$this->inn.'/status/'.$this->id;
+        return $this->getBaseUrl().$this->inn.'/status/'.$this->id;
     }
     
     /**
