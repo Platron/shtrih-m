@@ -2,9 +2,10 @@
     "name": "payprocessing/shtrih-m",
     "description": "Shtrih-m SDK (OrangeData, PayKiosk)",
     "require": {
-        "php": ">=5.3",
+        "php": ">=5.5",
         "psr/log": "1.0.2",
-        "phpseclib/phpseclib": "^2.0"
+        "phpseclib/phpseclib": "^2.0",
+        "myclabs/php-enum": "^1.6"
     },
     "require-dev": {
 		"php": ">=5.6",

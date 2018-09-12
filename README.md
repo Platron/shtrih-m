@@ -22,26 +22,79 @@ vendor/bin/phpunit tests/integration
 ### 1. Создание чека
 
 ```php
-$client = new Platron\Shtrihm\clients\PostClient('secretKeyData');
+use Platron\Shtrihm\clients\PostClient;
+use Platron\Shtrihm\data_objects\AdditionalAttribute;
+use Platron\Shtrihm\data_objects\Agent;
+use Platron\Shtrihm\data_objects\Customer;
+use Platron\Shtrihm\data_objects\Payment;
+use Platron\Shtrihm\data_objects\ReceiptPosition;
+use Platron\Shtrihm\data_objects\Supplier;
+use Platron\Shtrihm\handbooks\AgentTypes;
+use Platron\Shtrihm\handbooks\OperationType;
+use Platron\Shtrihm\handbooks\PaymentMethodType;
+use Platron\Shtrihm\handbooks\PaymentSubjectType;
+use Platron\Shtrihm\handbooks\PaymentType;
+use Platron\Shtrihm\handbooks\TaxatitionSystem;
+use Platron\Shtrihm\handbooks\Vates;
+use Platron\Shtrihm\services\CreateDocumentRequest;
+use Platron\Shtrihm\services\CreateDocumentResponse;
 
-$receiptPosition = new Platron\Shtrihm\data_objects\ReceiptPosition('test product', 100.00, 2, Platron\Shtrihm\data_objects\ReceiptPosition::TAX_VAT10);
+$agent = new Agent(new AgentTypes(AgentTypes::BANK_PAYMENT_AGENT));
+$agent->addPaymentAgentOperation('Test');
+$agent->addPaymentAgentPhoneNumber('79150000001');
+$agent->addPaymentOperatorAddress('Test address');
+$agent->addPaymentOperatorINN('1234567890');
+$agent->addPaymentOperatorName('Test agent');
+$agent->addPaymentTransferOperatorPhoneNumber('79150000002');
 
-$createDocumentService = (new Platron\Shtrihm\services\CreateDocumentRequest($transactionId))
-    ->addCustomerEmail('test@test.ru')
-    ->addCustomerPhone('79268752662')
-    ->addGroupCode('groupCode')
-    ->addInn('inn')
-    ->addOperationType(Platron\Shtrihm\services\CreateDocumentRequest::OPERATION_TYPE_BUY)
-    ->addPaymentType(Platron\Shtrihm\services\CreateDocumentRequest::PAYMENT_TYPE_ELECTRON)
-    ->addTaxatitionSystem(Platron\Shtrihm\services\CreateDocumentRequest::TAXATITION_SYSTEM_ESN)
-    ->addReceiptPosition($receiptPosition);
-$createDocumentResponse = new Platron\Shtrihm\services\CreateDocumentResponse($client->sendRequest($createDocumentService));
+$supplier = new Supplier('0987654321', 'Test supplier');
+$supplier->addPhone('79150000003');
+
+$receiptPosition = new ReceiptPosition('test product', 100.00, 2, new Vates(Vates::TAX_VAT10));
+$receiptPosition->addAdditionalAttribute('Test');
+$receiptPosition->addAgent($agent);
+$receiptPosition->addCustomsDeclarationNumber('Test custom declaration');
+$receiptPosition->addExcise(100.00);
+$receiptPosition->addManufacturerCountryCode(643);
+$receiptPosition->addNomenclatureCode('Test nomenclature code');
+$receiptPosition->addPaymentMethodType(new PaymentMethodType(PaymentMethodType::FULL_PAYMENT));
+$receiptPosition->addPaymentSubjectType(new PaymentSubjectType(PaymentSubjectType::PRODUCT));
+$receiptPosition->addSupplier($supplier);
+$receiptPosition->addUnitOfMeasurement('pounds');
+
+$customer = new Customer();
+$customer->addPhone('79150000004');
+$customer->addEmail('test@test.ru');
+$customer->addInn('1234512345');
+$customer->addName('Name Surname');
+$customer->addAdditionalAttribute(new AdditionalAttribute('Additional name', 'Additional value'));
+
+$payment = new Payment(new PaymentType(PaymentType::PAYMNET_TYPE_MASTERCARD), 200.00);
+
+$transactionId = time();
+$createDocumentService = new CreateDocumentRequest($transactionId);
+$createDocumentService->addAdditionalAttribute('Test additional attribute');
+$createDocumentService->addCustomer($customer);
+$createDocumentService->addInn(9718064247);
+$createDocumentService->addGroup('Main');
+$createDocumentService->addOperationType(new OperationType(OperationType::OPERATION_TYPE_SELL));
+$createDocumentService->addPayment($payment);
+$createDocumentService->addReceiptPosition($receiptPosition);
+$createDocumentService->addTaxatitionSystem(new TaxatitionSystem(TaxatitionSystem::TAXATITION_SYSTEM_ENDV));
+
+$client = new PostClient($secretKeyPath, $keyPassword, $certPath, $signedKeyPath);
+$responseCreate = $client->sendRequest($createDocumentService);
+$createDocumentResponse = new CreateDocumentResponse($client->getLastHttpCode(), $responseCreate);        
 ```
 
 ### 2. Запрос статуса 
 
 ```php
-    $client = new Platron\Shtrihm\clients\PostClient('secretKeyData');
-    $getStatusServise = new Platron\Shtrihm\services\GetStatusRequest('transactionId');
-    $getStatusResponse = new Platron\Shtrihm\services\GetStatusResponse($client->sendRequest($getStatusServise));
+use Platron\Shtrihm\clients\PostClient;
+use Platron\Shtrihm\services\GetStatusRequest;
+use Platron\Shtrihm\services\GetStatusResponse;
+
+$client = new PostClient('secretKeyData');
+$getStatusServise = new GetStatusRequest('transactionId');
+$getStatusResponse = new GetStatusResponse($client->sendRequest($getStatusServise));
 ```

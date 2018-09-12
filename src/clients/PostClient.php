@@ -82,7 +82,7 @@ class PostClient implements iClient {
         curl_setopt($curl, CURLOPT_SSLKEY, $this->secretKeyPath);
         curl_setopt($curl, CURLOPT_SSLKEYPASSWD, $this->keyPassword);
         curl_setopt($curl, CURLOPT_SSLCERT, $this->certPath);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true); 
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $curlHttpHeaders);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->connectionTimeout);
@@ -95,7 +95,7 @@ class PostClient implements iClient {
             $this->logger->log(LogLevel::INFO, 'Response '.$response);
             $this->logger->log(LogLevel::INFO, 'Response HTTP code '.$this->lastHttpCode);
         }
-        	
+
 		if(curl_errno($curl)){
 			throw new SdkException(curl_error($curl), curl_errno($curl));
 		}
