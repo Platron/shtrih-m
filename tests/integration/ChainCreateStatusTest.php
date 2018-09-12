@@ -38,13 +38,13 @@ class ChainCreateStatusTest extends IntegrationTestBase {
 		$receiptPosition->addAdditionalAttribute('Test');
 		$receiptPosition->addAgent($agent);
 		$receiptPosition->addCustomsDeclarationNumber('Test custom declaration');
-		$receiptPosition->addExcise('Test excise');
-		$receiptPosition->addManufacturerCountryCode('Test manufacture code');
+		$receiptPosition->addExcise(100.00);
+		$receiptPosition->addManufacturerCountryCode('RU');
 		$receiptPosition->addNomenclatureCode('Test nomenclature code');
 		$receiptPosition->addPaymentMethodType(new PaymentMethodType(PaymentMethodType::FULL_PAYMENT));
 		$receiptPosition->addPaymentSubjectType(new PaymentSubjectType(PaymentSubjectType::PRODUCT));
 		$receiptPosition->addSupplier($supplier);
-		$receiptPosition->addUnitOfMeasurement('Test unit of measuring');
+		$receiptPosition->addUnitOfMeasurement('pounds');
 
 		$customer = new Customer();
 		$customer->addPhone('79150000004');
@@ -57,6 +57,7 @@ class ChainCreateStatusTest extends IntegrationTestBase {
 
 		$transactionId = time();
         $createDocumentService = new CreateDocumentRequest($transactionId);
+		$createDocumentService->setDemoMode();
 		$createDocumentService->addAdditionalAttribute('Test additional attribute');
 		$createDocumentService->addCustomer($customer);
 		$createDocumentService->addInn($this->inn);

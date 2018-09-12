@@ -28,7 +28,7 @@ class Supplier extends BaseDataObject
 	 * @return $this
 	 */
 	public function addPhone($phone){
-		$this->phoneNumbers[] = $phone;
+		$this->phoneNumbers[] = '+'.$phone;
 		return $this;
 	}
 
