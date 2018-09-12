@@ -96,7 +96,7 @@ class ReceiptPosition extends BaseDataObject{
 	}
 
 	/**
-	 * @param string $manufacturerCountryCode
+	 * @param int $manufacturerCountryCode ISO 3 цифры
 	 * @return $this
 	 */
 	public function addManufacturerCountryCode($manufacturerCountryCode){

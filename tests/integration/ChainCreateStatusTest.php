@@ -39,7 +39,7 @@ class ChainCreateStatusTest extends IntegrationTestBase {
 		$receiptPosition->addAgent($agent);
 		$receiptPosition->addCustomsDeclarationNumber('Test custom declaration');
 		$receiptPosition->addExcise(100.00);
-		$receiptPosition->addManufacturerCountryCode('RU');
+		$receiptPosition->addManufacturerCountryCode(643);
 		$receiptPosition->addNomenclatureCode('Test nomenclature code');
 		$receiptPosition->addPaymentMethodType(new PaymentMethodType(PaymentMethodType::FULL_PAYMENT));
 		$receiptPosition->addPaymentSubjectType(new PaymentSubjectType(PaymentSubjectType::PRODUCT));
@@ -62,8 +62,7 @@ class ChainCreateStatusTest extends IntegrationTestBase {
 		$createDocumentService->addCustomer($customer);
 		$createDocumentService->addInn($this->inn);
 		$createDocumentService->addGroup($this->groupCode);
-		$createDocumentService->addKey('Test Key');
-		$createDocumentService->addOperationType(new OperationType(OperationType::OPERATION_TYPE_BUY));
+		$createDocumentService->addOperationType(new OperationType(OperationType::OPERATION_TYPE_SELL));
 		$createDocumentService->addPayment($payment);
 		$createDocumentService->addReceiptPosition($receiptPosition);
 		$createDocumentService->addTaxatitionSystem(new TaxatitionSystem(TaxatitionSystem::TAXATITION_SYSTEM_ENDV));
@@ -73,8 +72,9 @@ class ChainCreateStatusTest extends IntegrationTestBase {
         $createDocumentResponse = new CreateDocumentResponse($client->getLastHttpCode(), $responseCreate);
         
         $this->assertTrue($createDocumentResponse->isValid());
-        
+
         $getStatusService = new GetStatusRequest($this->inn, $transactionId);
+		$getStatusService->setDemoMode();
         $responseGetStatus = $client->sendRequest($getStatusService);
         $getStatusResponse = new GetStatusResponse($client->getLastHttpCode(), $responseGetStatus);
 

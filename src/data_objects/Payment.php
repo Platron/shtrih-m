@@ -7,17 +7,17 @@ use Platron\Shtrihm\handbooks\PaymentType;
 class Payment extends BaseDataObject
 {
 	/** @var int */
-	protected $paymentType;
+	protected $type;
 	/** @var float */
 	protected $amount;
 
 	/**
 	 * Payment constructor.
-	 * @param PaymentType $paymentType
+	 * @param PaymentType $type
 	 * @param float $amount
 	 */
-	public function __construct(PaymentType $paymentType, $amount){
-		$this->paymentType = $paymentType->getValue();
+	public function __construct(PaymentType $type, $amount){
+		$this->type = $type->getValue();
 		$this->amount = $amount;
 	}
 }
