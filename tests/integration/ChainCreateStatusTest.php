@@ -68,6 +68,7 @@ class ChainCreateStatusTest extends IntegrationTestBase {
 		$createDocumentService->addTaxatitionSystem(new TaxatitionSystem(TaxatitionSystem::TAXATITION_SYSTEM_ENDV));
 
 		$client = new PostClient($this->secretKeyPath, $this->keyPassword, $this->certPath, $this->signedKeyPath);
+		$client->setLogger(new TestLogger());
         $responseCreate = $client->sendRequest($createDocumentService);
         $createDocumentResponse = new CreateDocumentResponse($client->getLastHttpCode(), $responseCreate);
         
