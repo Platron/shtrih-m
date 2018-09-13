@@ -2,12 +2,10 @@
 
 namespace Platron\Shtrihm\services;
 
-use Platron\Shtrihm\services\BaseServiceResponse;
 use stdClass;
 
 class CreateDocumentResponse extends BaseServiceResponse
 {
-
 	const HTTP_CODE_OK = 201;
 
 	/** @var string */

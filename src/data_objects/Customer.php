@@ -18,52 +18,42 @@ class Customer extends BaseDataObject
 
 	/**
 	 * @param $phone
-	 * @return $this
 	 */
 	public function addPhone($phone)
 	{
 		$this->phone = $phone;
-		return $this;
 	}
 
 	/**
 	 * @param $email
-	 * @return $this
 	 */
 	public function addEmail($email)
 	{
 		$this->email = $email;
-		return $this;
 	}
 
 	/**
 	 * @param $inn
-	 * @return $this
 	 */
 	public function addInn($inn)
 	{
 		$this->inn = $inn;
-		return $this;
 	}
 
 	/**
 	 * @param $name
-	 * @return $this
 	 */
 	public function addName($name)
 	{
 		$this->name = $name;
-		return $this;
 	}
 
 	/**
 	 * @param AdditionalAttribute $additionalAttribute
-	 * @return $this
 	 */
 	public function addAdditionalAttribute(AdditionalAttribute $additionalAttribute)
 	{
 		$this->additionalAttribute = $additionalAttribute;
-		return $this;
 	}
 
 	public function getParameters()

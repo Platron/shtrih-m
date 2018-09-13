@@ -15,7 +15,7 @@ class GetStatusRequest extends BaseServiceRequest
 	 */
 	public function getRequestUrl()
 	{
-		return $this->getBaseUrl() . $this->inn . '/status/' . $this->id;
+		return $this->getBaseUrl() .'/documents/'. $this->inn . '/status/' . $this->id;
 	}
 
 	/**

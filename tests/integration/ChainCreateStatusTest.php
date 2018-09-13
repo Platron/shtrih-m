@@ -14,10 +14,10 @@ use Platron\Shtrihm\handbooks\OperationType;
 use Platron\Shtrihm\handbooks\PaymentMethodType;
 use Platron\Shtrihm\handbooks\PaymentSubjectType;
 use Platron\Shtrihm\handbooks\PaymentType;
-use Platron\Shtrihm\handbooks\TaxatitionSystem;
+use Platron\Shtrihm\handbooks\TaxationSystem;
 use Platron\Shtrihm\handbooks\Vates;
-use Platron\Shtrihm\services\CreateDocumentRequest;
-use Platron\Shtrihm\services\CreateDocumentResponse;
+use Platron\Shtrihm\services\CreateReceiptRequest;
+use Platron\Shtrihm\services\CreateReceiptResponse;
 use Platron\Shtrihm\services\GetStatusRequest;
 use Platron\Shtrihm\services\GetStatusResponse;
 
@@ -31,7 +31,7 @@ class ChainCreateStatusTest extends IntegrationTestBase
 		$client = new PostClient($this->secretKeyPath, $this->keyPassword, $this->certPath, $this->signedKeyPath);
 		$client->setLogger(new TestLogger());
 		$responseCreate = $client->sendRequest($createDocumentService);
-		$createDocumentResponse = new CreateDocumentResponse($client->getLastHttpCode(), $responseCreate);
+		$createDocumentResponse = new CreateReceiptResponse($client->getLastHttpCode(), $responseCreate);
 
 		$this->assertTrue($createDocumentResponse->isValid());
 
@@ -77,7 +77,7 @@ class ChainCreateStatusTest extends IntegrationTestBase
 	 */
 	private function createReceiptPosition($agent, $supplier)
 	{
-		$receiptPosition = new ReceiptPosition('test product', 100.00, 2, new Vates(Vates::TAX_VAT10));
+		$receiptPosition = new ReceiptPosition('test product', 100.00, 2, new Vates(Vates::VAT10));
 		$receiptPosition->addAdditionalAttribute('Test');
 		$receiptPosition->addAgent($agent);
 		$receiptPosition->addCustomsDeclarationNumber('Test custom declaration');
@@ -110,13 +110,13 @@ class ChainCreateStatusTest extends IntegrationTestBase
 	 */
 	private function createPayment()
 	{
-		$payment = new Payment(new PaymentType(PaymentType::PAYMNET_TYPE_MASTERCARD), 200.00);
+		$payment = new Payment(new PaymentType(PaymentType::MASTERCARD), 200.00);
 		return $payment;
 	}
 
 	/**
 	 * @param $transactionId
-	 * @return CreateDocumentRequest
+	 * @return CreateReceiptRequest
 	 */
 	private function createDocumentService($transactionId)
 	{
@@ -126,16 +126,16 @@ class ChainCreateStatusTest extends IntegrationTestBase
 		$customer = $this->createCustomer();
 		$payment = $this->createPayment();
 
-		$createDocumentService = new CreateDocumentRequest($transactionId);
+		$createDocumentService = new CreateReceiptRequest($transactionId);
 		$createDocumentService->setDemoMode();
 		$createDocumentService->addAdditionalAttribute('Test additional attribute');
 		$createDocumentService->addCustomer($customer);
 		$createDocumentService->addInn($this->inn);
 		$createDocumentService->addGroup($this->groupCode);
-		$createDocumentService->addOperationType(new OperationType(OperationType::OPERATION_TYPE_SELL));
+		$createDocumentService->addOperationType(new OperationType(OperationType::SELL));
 		$createDocumentService->addPayment($payment);
 		$createDocumentService->addReceiptPosition($receiptPosition);
-		$createDocumentService->addTaxatitionSystem(new TaxatitionSystem(TaxatitionSystem::TAXATITION_SYSTEM_ENDV));
+		$createDocumentService->addTaxationSystem(new TaxationSystem(TaxationSystem::SYSTEM_ENDV));
 		return $createDocumentService;
 	}
 

@@ -6,12 +6,12 @@ use Platron\Shtrihm\data_objects\Customer;
 use Platron\Shtrihm\data_objects\Payment;
 use Platron\Shtrihm\data_objects\ReceiptPosition;
 use Platron\Shtrihm\handbooks\OperationType;
-use Platron\Shtrihm\handbooks\TaxatitionSystem;
+use Platron\Shtrihm\handbooks\TaxationSystem;
 
 /**
  * Все парараметры обязательны для заполнения. Контактные данные требуются - либо email, либо телефон
  */
-class CreateDocumentRequest extends BaseServiceRequest
+class CreateReceiptRequest extends BaseServiceRequest
 {
 
 	/** @var string идентификатор группы ККТ */
@@ -29,7 +29,7 @@ class CreateDocumentRequest extends BaseServiceRequest
 	/** @var Payment[] Оплаты */
 	protected $payments;
 	/** @var string */
-	protected $taxatitionSystem;
+	protected $taxationSystem;
 	/** @var integer */
 	protected $key;
 	/** @var string */
@@ -37,12 +37,10 @@ class CreateDocumentRequest extends BaseServiceRequest
 
 	/**
 	 * @param int $id Идентификатор заказа
-	 * @return CreateDocumentRequest
 	 */
 	public function __construct($id)
 	{
 		$this->id = $id;
-		return $this;
 	}
 
 	/**
@@ -50,97 +48,79 @@ class CreateDocumentRequest extends BaseServiceRequest
 	 */
 	public function getRequestUrl()
 	{
-		return $this->getBaseUrl();
+		return $this->getBaseUrl().'/documents/';
 	}
 
 	/**
 	 * @param Customer $customer
-	 * @return $this
 	 */
 	public function addCustomer(Customer $customer)
 	{
 		$this->customer = $customer;
-		return $this;
 	}
 
 	/**
 	 * @param type $inn
-	 * @return CreateDocumentRequest
 	 */
 	public function addInn($inn)
 	{
 		$this->inn = $inn;
-		return $this;
 	}
 
 	/**
 	 * @param ReceiptPosition $position
-	 * @return CreateDocumentRequest
 	 */
 	public function addReceiptPosition(ReceiptPosition $position)
 	{
 		$this->receiptPositions[] = $position;
-		return $this;
 	}
 
 	/**
 	 * @param Payment $payment
-	 * @return $this
 	 */
 	public function addPayment(Payment $payment)
 	{
 		$this->payments[] = $payment;
-		return $this;
 	}
 
 	/**
-	 * @param TaxatitionSystem $taxatitionSystem
-	 * @return CreateDocumentRequest
+	 * @param TaxationSystem $taxatitionSystem
 	 */
-	public function addTaxatitionSystem(TaxatitionSystem $taxatitionSystem)
+	public function addTaxationSystem(TaxationSystem $taxatitionSystem)
 	{
-		$this->taxatitionSystem = $taxatitionSystem->getValue();
-		return $this;
+		$this->taxationSystem = $taxatitionSystem->getValue();
 	}
 
 	/**
 	 * @param OperationType $operationType Тип операции. Из констант
-	 * @return CreateDocumentRequest
 	 */
 	public function addOperationType(OperationType $operationType)
 	{
 		$this->operationType = $operationType;
-		return $this;
 	}
 
 	/**
 	 * @param $additionalAttribute
-	 * @return $this
 	 */
 	public function addAdditionalAttribute($additionalAttribute)
 	{
 		$this->additionalAttribute = $additionalAttribute;
-		return $this;
 	}
 
 	/**
 	 * @param string $group Идентификатор группы ККТ
-	 * @return CreateDocumentRequest
 	 */
 	public function addGroup($group)
 	{
 		$this->group = $group;
-		return $this;
 	}
 
 	/**
 	 * @param integer $key
-	 * @return CreateDocumentRequest
 	 */
 	public function addKey($key)
 	{
 		$this->key = $key;
-		return $this;
 	}
 
 	public function getParameters()
@@ -165,7 +145,7 @@ class CreateDocumentRequest extends BaseServiceRequest
 				'Positions' => $items,
 				'CheckClose' => [
 					'Payments' => $payments,
-					'TaxationSystem' => $this->taxatitionSystem,
+					'TaxationSystem' => $this->taxationSystem,
 				],
 			],
 		];

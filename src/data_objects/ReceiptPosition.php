@@ -54,82 +54,66 @@ class ReceiptPosition extends BaseDataObject
 
 	/**
 	 * @param PaymentMethodType $paymentMethodType
-	 * @return $this
 	 */
 	public function addPaymentMethodType(PaymentMethodType $paymentMethodType)
 	{
 		$this->paymentMethodType = $paymentMethodType->getValue();
-		return $this;
 	}
 
 	/**
 	 * @param PaymentSubjectType $paymentSubjectType
-	 * @return $this
 	 */
 	public function addPaymentSubjectType(PaymentSubjectType $paymentSubjectType)
 	{
 		$this->paymentSubjectType = $paymentSubjectType->getValue();
-		return $this;
 	}
 
 	/**
 	 * @param string $nomenclatureCode
-	 * @return $this
 	 */
 	public function addNomenclatureCode($nomenclatureCode)
 	{
 		$this->nomenclatureCode = $nomenclatureCode;
-		return $this;
 	}
 
 	/**
 	 * @param string $unitOfMeasurement
-	 * @return $this
 	 */
 	public function addUnitOfMeasurement($unitOfMeasurement)
 	{
 		$this->unitOfMeasurement = $unitOfMeasurement;
-		return $this;
 	}
 
 	/**
 	 * @param string $additionalAttribute
-	 * @return $this
 	 */
 	public function addAdditionalAttribute($additionalAttribute)
 	{
 		$this->additionalAttribute = $additionalAttribute;
-		return $this;
 	}
 
 	/**
 	 * @param int $manufacturerCountryCode ISO 3 цифры
-	 * @return $this
 	 */
 	public function addManufacturerCountryCode($manufacturerCountryCode)
 	{
 		$this->manufacturerCountryCode = $manufacturerCountryCode;
-		return $this;
 	}
 
 	/**
 	 * @param string $customsDeclarationNumber
-	 * @return $this
 	 */
 	public function addCustomsDeclarationNumber($customsDeclarationNumber)
 	{
 		$this->customsDeclarationNumber = $customsDeclarationNumber;
-		return $this;
 	}
 
 	/**
 	 * @param float $excise
-	 * @return $this
 	 */
 	public function addExcise($excise)
 	{
 		$this->excise = $excise;
-		return $this;
 	}
 
 	/**
@@ -139,17 +123,14 @@ class ReceiptPosition extends BaseDataObject
 	public function addAgent(Agent $agent)
 	{
 		$this->agent = $agent;
-		return $this;
 	}
 
 	/**
 	 * @param Supplier $supplier
-	 * @return $this
 	 */
 	public function addSupplier(Supplier $supplier)
 	{
 		$this->supplier = $supplier;
-		return $this;
 	}
 
 	public function getParameters()
