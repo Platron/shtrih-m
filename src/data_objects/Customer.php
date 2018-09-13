@@ -30,7 +30,8 @@ class Customer extends BaseDataObject
 	 * @param $email
 	 * @return $this
 	 */
-	public function addEmail($email){
+	public function addEmail($email)
+	{
 		$this->email = $email;
 		return $this;
 	}
@@ -39,7 +40,8 @@ class Customer extends BaseDataObject
 	 * @param $inn
 	 * @return $this
 	 */
-	public function addInn($inn){
+	public function addInn($inn)
+	{
 		$this->inn = $inn;
 		return $this;
 	}
@@ -48,7 +50,8 @@ class Customer extends BaseDataObject
 	 * @param $name
 	 * @return $this
 	 */
-	public function addName($name){
+	public function addName($name)
+	{
 		$this->name = $name;
 		return $this;
 	}
@@ -57,7 +60,8 @@ class Customer extends BaseDataObject
 	 * @param AdditionalAttribute $additionalAttribute
 	 * @return $this
 	 */
-	public function addAdditionalAttribute(AdditionalAttribute $additionalAttribute){
+	public function addAdditionalAttribute(AdditionalAttribute $additionalAttribute)
+	{
 		$this->additionalAttribute = $additionalAttribute;
 		return $this;
 	}

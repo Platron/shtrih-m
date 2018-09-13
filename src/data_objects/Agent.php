@@ -38,7 +38,7 @@ class Agent extends BaseDataObject
 	 */
 	public function addPaymentTransferOperatorPhoneNumber($paymentTransferOperatorPhoneNumber)
 	{
-		$this->paymentTransferOperatorPhoneNumbers[] = '+'.$paymentTransferOperatorPhoneNumber;
+		$this->paymentTransferOperatorPhoneNumbers[] = '+' . $paymentTransferOperatorPhoneNumber;
 		return $this;
 	}
 
@@ -58,7 +58,7 @@ class Agent extends BaseDataObject
 	 */
 	public function addPaymentAgentPhoneNumber($paymentAgentPhoneNumber)
 	{
-		$this->paymentAgentPhoneNumbers[] = '+'.$paymentAgentPhoneNumber;
+		$this->paymentAgentPhoneNumbers[] = '+' . $paymentAgentPhoneNumber;
 		return $this;
 	}
 

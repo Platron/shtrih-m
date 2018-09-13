@@ -21,9 +21,11 @@ use Platron\Shtrihm\services\CreateDocumentResponse;
 use Platron\Shtrihm\services\GetStatusRequest;
 use Platron\Shtrihm\services\GetStatusResponse;
 
-class ChainCreateStatusTest extends IntegrationTestBase {
-    public function testChainCreateStatus(){
-    	$agent = new Agent(new AgentTypes(AgentTypes::BANK_PAYMENT_AGENT));
+class ChainCreateStatusTest extends IntegrationTestBase
+{
+	public function testChainCreateStatus()
+	{
+		$agent = new Agent(new AgentTypes(AgentTypes::BANK_PAYMENT_AGENT));
 		$agent->addPaymentAgentOperation('Test');
 		$agent->addPaymentAgentPhoneNumber('79150000001');
 		$agent->addPaymentOperatorAddress('Test address');
@@ -34,7 +36,7 @@ class ChainCreateStatusTest extends IntegrationTestBase {
 		$supplier = new Supplier('0987654321', 'Test supplier');
 		$supplier->addPhone('79150000003');
 
-        $receiptPosition = new ReceiptPosition('test product', 100.00, 2, new Vates(Vates::TAX_VAT10));
+		$receiptPosition = new ReceiptPosition('test product', 100.00, 2, new Vates(Vates::TAX_VAT10));
 		$receiptPosition->addAdditionalAttribute('Test');
 		$receiptPosition->addAgent($agent);
 		$receiptPosition->addCustomsDeclarationNumber('Test custom declaration');
@@ -56,7 +58,7 @@ class ChainCreateStatusTest extends IntegrationTestBase {
 		$payment = new Payment(new PaymentType(PaymentType::PAYMNET_TYPE_MASTERCARD), 200.00);
 
 		$transactionId = time();
-        $createDocumentService = new CreateDocumentRequest($transactionId);
+		$createDocumentService = new CreateDocumentRequest($transactionId);
 		$createDocumentService->setDemoMode();
 		$createDocumentService->addAdditionalAttribute('Test additional attribute');
 		$createDocumentService->addCustomer($customer);
@@ -69,16 +71,16 @@ class ChainCreateStatusTest extends IntegrationTestBase {
 
 		$client = new PostClient($this->secretKeyPath, $this->keyPassword, $this->certPath, $this->signedKeyPath);
 		$client->setLogger(new TestLogger());
-        $responseCreate = $client->sendRequest($createDocumentService);
-        $createDocumentResponse = new CreateDocumentResponse($client->getLastHttpCode(), $responseCreate);
-        
-        $this->assertTrue($createDocumentResponse->isValid());
+		$responseCreate = $client->sendRequest($createDocumentService);
+		$createDocumentResponse = new CreateDocumentResponse($client->getLastHttpCode(), $responseCreate);
 
-        $getStatusService = new GetStatusRequest($this->inn, $transactionId);
+		$this->assertTrue($createDocumentResponse->isValid());
+
+		$getStatusService = new GetStatusRequest($this->inn, $transactionId);
 		$getStatusService->setDemoMode();
-        $responseGetStatus = $client->sendRequest($getStatusService);
-        $getStatusResponse = new GetStatusResponse($client->getLastHttpCode(), $responseGetStatus);
+		$responseGetStatus = $client->sendRequest($getStatusService);
+		$getStatusResponse = new GetStatusResponse($client->getLastHttpCode(), $responseGetStatus);
 
-        $this->assertTrue($getStatusResponse->isValid());
-    }
+		$this->assertTrue($getStatusResponse->isValid());
+	}
 }

@@ -2,6 +2,7 @@
 
 namespace Platron\Shtrihm;
 
-class SdkException extends \Exception {
-    
+class SdkException extends \Exception
+{
+
 }

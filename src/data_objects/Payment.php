@@ -16,7 +16,8 @@ class Payment extends BaseDataObject
 	 * @param PaymentType $type
 	 * @param float $amount
 	 */
-	public function __construct(PaymentType $type, $amount){
+	public function __construct(PaymentType $type, $amount)
+	{
 		$this->type = $type->getValue();
 		$this->amount = $amount;
 	}

@@ -54,7 +54,7 @@ class TestLogger implements LoggerInterface
 
 	private function logToFile($message)
 	{
-		$preparedString = date('Y-m-d H:i:s').'; '.$message.PHP_EOL;
-		file_put_contents(__DIR__.'/logs/'.date('Y-m-d').'.log', $preparedString, FILE_APPEND);
+		$preparedString = date('Y-m-d H:i:s') . '; ' . $message . PHP_EOL;
+		file_put_contents(__DIR__ . '/logs/' . date('Y-m-d') . '.log', $preparedString, FILE_APPEND);
 	}
 }
