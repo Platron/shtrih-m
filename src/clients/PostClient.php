@@ -32,8 +32,11 @@ class PostClient implements iClient
 	protected $connectionTimeout = 30;
 
 	/**
-	 * Секретный ключ для подписи запросов
+	 * PostClient constructor.
 	 * @param string $secretKeyPath
+	 * @param string $keyPassword
+	 * @param string $certPath
+	 * @param string $signKeyPath
 	 */
 	public function __construct($secretKeyPath, $keyPassword, $certPath, $signKeyPath)
 	{
