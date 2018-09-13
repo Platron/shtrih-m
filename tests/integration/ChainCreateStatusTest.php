@@ -50,10 +50,12 @@ class ChainCreateStatusTest extends IntegrationTestBase
 		$agent = new Agent(new AgentTypes(AgentTypes::BANK_PAYMENT_AGENT));
 		$agent->addPaymentAgentOperation('Test');
 		$agent->addPaymentAgentPhoneNumber('79150000001');
+		$agent->addPaymentAgentPhoneNumber('79150000002');
 		$agent->addPaymentOperatorAddress('Test address');
 		$agent->addPaymentOperatorINN('1234567890');
 		$agent->addPaymentOperatorName('Test agent');
-		$agent->addPaymentTransferOperatorPhoneNumber('79150000002');
+		$agent->addPaymentTransferOperatorPhoneNumber('79150000003');
+		$agent->addPaymentTransferOperatorPhoneNumber('79150000004');
 		return $agent;
 	}
 
@@ -63,7 +65,8 @@ class ChainCreateStatusTest extends IntegrationTestBase
 	private function createSupplier()
 	{
 		$supplier = new Supplier('0987654321', 'Test supplier');
-		$supplier->addPhone('79150000003');
+		$supplier->addPhone('79150000005');
+		$supplier->addPhone('79150000006');
 		return $supplier;
 	}
 
