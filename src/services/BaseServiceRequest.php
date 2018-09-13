@@ -10,9 +10,13 @@ abstract class BaseServiceRequest
 	const REQUEST_DEMO_URL = 'https://apip.orangedata.ru:2443/api/v2/documents/';
 	const REQUEST_URL = 'https://api.orangedata.ru:12003/api/v2/documents/';
 
+	/**
+	 * @return $this
+	 */
 	public function setDemoMode()
 	{
 		$this->demoMode = true;
+		return $this;
 	}
 
 	/**
