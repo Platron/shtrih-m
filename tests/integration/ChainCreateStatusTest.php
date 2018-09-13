@@ -25,49 +25,8 @@ class ChainCreateStatusTest extends IntegrationTestBase
 {
 	public function testChainCreateStatus()
 	{
-		$agent = new Agent(new AgentTypes(AgentTypes::BANK_PAYMENT_AGENT));
-		$agent->addPaymentAgentOperation('Test');
-		$agent->addPaymentAgentPhoneNumber('79150000001');
-		$agent->addPaymentOperatorAddress('Test address');
-		$agent->addPaymentOperatorINN('1234567890');
-		$agent->addPaymentOperatorName('Test agent');
-		$agent->addPaymentTransferOperatorPhoneNumber('79150000002');
-
-		$supplier = new Supplier('0987654321', 'Test supplier');
-		$supplier->addPhone('79150000003');
-
-		$receiptPosition = new ReceiptPosition('test product', 100.00, 2, new Vates(Vates::TAX_VAT10));
-		$receiptPosition->addAdditionalAttribute('Test');
-		$receiptPosition->addAgent($agent);
-		$receiptPosition->addCustomsDeclarationNumber('Test custom declaration');
-		$receiptPosition->addExcise(100.00);
-		$receiptPosition->addManufacturerCountryCode(643);
-		$receiptPosition->addNomenclatureCode('Test nomenclature code');
-		$receiptPosition->addPaymentMethodType(new PaymentMethodType(PaymentMethodType::FULL_PAYMENT));
-		$receiptPosition->addPaymentSubjectType(new PaymentSubjectType(PaymentSubjectType::PRODUCT));
-		$receiptPosition->addSupplier($supplier);
-		$receiptPosition->addUnitOfMeasurement('pounds');
-
-		$customer = new Customer();
-		$customer->addPhone('79150000004');
-		$customer->addEmail('test@test.ru');
-		$customer->addInn('1234512345');
-		$customer->addName('Name Surname');
-		$customer->addAdditionalAttribute(new AdditionalAttribute('Additional name', 'Additional value'));
-
-		$payment = new Payment(new PaymentType(PaymentType::PAYMNET_TYPE_MASTERCARD), 200.00);
-
 		$transactionId = time();
-		$createDocumentService = new CreateDocumentRequest($transactionId);
-		$createDocumentService->setDemoMode();
-		$createDocumentService->addAdditionalAttribute('Test additional attribute');
-		$createDocumentService->addCustomer($customer);
-		$createDocumentService->addInn($this->inn);
-		$createDocumentService->addGroup($this->groupCode);
-		$createDocumentService->addOperationType(new OperationType(OperationType::OPERATION_TYPE_SELL));
-		$createDocumentService->addPayment($payment);
-		$createDocumentService->addReceiptPosition($receiptPosition);
-		$createDocumentService->addTaxatitionSystem(new TaxatitionSystem(TaxatitionSystem::TAXATITION_SYSTEM_ENDV));
+		$createDocumentService = $this->createDocumentService($transactionId);
 
 		$client = new PostClient($this->secretKeyPath, $this->keyPassword, $this->certPath, $this->signedKeyPath);
 		$client->setLogger(new TestLogger());
@@ -82,5 +41,99 @@ class ChainCreateStatusTest extends IntegrationTestBase
 		$getStatusResponse = new GetStatusResponse($client->getLastHttpCode(), $responseGetStatus);
 
 		$this->assertTrue($getStatusResponse->isValid());
+	}
+
+	/**
+	 * @return Agent
+	 */
+	private function createAgent()
+	{
+		$agent = new Agent(new AgentTypes(AgentTypes::BANK_PAYMENT_AGENT));
+		$agent->addPaymentAgentOperation('Test');
+		$agent->addPaymentAgentPhoneNumber('79150000001');
+		$agent->addPaymentOperatorAddress('Test address');
+		$agent->addPaymentOperatorINN('1234567890');
+		$agent->addPaymentOperatorName('Test agent');
+		$agent->addPaymentTransferOperatorPhoneNumber('79150000002');
+		return $agent;
+	}
+
+	/**
+	 * @return Supplier
+	 */
+	private function createSupplier()
+	{
+		$supplier = new Supplier('0987654321', 'Test supplier');
+		$supplier->addPhone('79150000003');
+		return $supplier;
+	}
+
+	/**
+	 * @param $agent
+	 * @param $supplier
+	 * @return ReceiptPosition
+	 */
+	private function createReceiptPosition($agent, $supplier)
+	{
+		$receiptPosition = new ReceiptPosition('test product', 100.00, 2, new Vates(Vates::TAX_VAT10));
+		$receiptPosition->addAdditionalAttribute('Test');
+		$receiptPosition->addAgent($agent);
+		$receiptPosition->addCustomsDeclarationNumber('Test custom declaration');
+		$receiptPosition->addExcise(100.00);
+		$receiptPosition->addManufacturerCountryCode(643);
+		$receiptPosition->addNomenclatureCode('Test nomenclature code');
+		$receiptPosition->addPaymentMethodType(new PaymentMethodType(PaymentMethodType::FULL_PAYMENT));
+		$receiptPosition->addPaymentSubjectType(new PaymentSubjectType(PaymentSubjectType::PRODUCT));
+		$receiptPosition->addSupplier($supplier);
+		$receiptPosition->addUnitOfMeasurement('pounds');
+		return $receiptPosition;
+	}
+
+	/**
+	 * @return Customer
+	 */
+	private function createCustomer()
+	{
+		$customer = new Customer();
+		$customer->addPhone('79150000004');
+		$customer->addEmail('test@test.ru');
+		$customer->addInn('1234512345');
+		$customer->addName('Name Surname');
+		$customer->addAdditionalAttribute(new AdditionalAttribute('Additional name', 'Additional value'));
+		return $customer;
+	}
+
+	/**
+	 * @return Payment
+	 */
+	private function createPayment()
+	{
+		$payment = new Payment(new PaymentType(PaymentType::PAYMNET_TYPE_MASTERCARD), 200.00);
+		return $payment;
+	}
+
+	/**
+	 * @param $transactionId
+	 * @return CreateDocumentRequest
+	 */
+	private function createDocumentService($transactionId)
+	{
+		$agent = $this->createAgent();
+		$supplier = $this->createSupplier();
+		$receiptPosition = $this->createReceiptPosition($agent, $supplier);
+		$customer = $this->createCustomer();
+		$payment = $this->createPayment();
+
+		$createDocumentService = new CreateDocumentRequest($transactionId);
+		$createDocumentService->setDemoMode();
+		$createDocumentService->addAdditionalAttribute('Test additional attribute');
+		$createDocumentService->addCustomer($customer);
+		$createDocumentService->addInn($this->inn);
+		$createDocumentService->addGroup($this->groupCode);
+		$createDocumentService->addOperationType(new OperationType(OperationType::OPERATION_TYPE_SELL));
+		$createDocumentService->addPayment($payment);
+		$createDocumentService->addReceiptPosition($receiptPosition);
+		$createDocumentService->addTaxatitionSystem(new TaxatitionSystem(TaxatitionSystem::TAXATITION_SYSTEM_ENDV));
+		return $createDocumentService;
 	}
 }

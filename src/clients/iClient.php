@@ -4,17 +4,18 @@ namespace Platron\Shtrihm\clients;
 
 use Platron\Shtrihm\services\BaseServiceRequest;
 
-interface iClient {
-    
-    /**
-     * Послать запрос
-     * @param \Platron\Shtrihm\BaseService $service
-     */
-    public function sendRequest(BaseServiceRequest $service);
-    
-    /**
-     * Получить последний http ответ
-     * @return int
-     */
-    public function getLastHttpCode();
+interface iClient
+{
+
+	/**
+	 * Послать запрос
+	 * @param BaseServiceRequest $service
+	 */
+	public function sendRequest(BaseServiceRequest $service);
+
+	/**
+	 * Получить последний http ответ
+	 * @return int
+	 */
+	public function getLastHttpCode();
 }
