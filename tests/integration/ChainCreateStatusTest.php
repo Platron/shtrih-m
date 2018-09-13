@@ -35,8 +35,7 @@ class ChainCreateStatusTest extends IntegrationTestBase
 
 		$this->assertTrue($createDocumentResponse->isValid());
 
-		$getStatusService = new GetStatusRequest($this->inn, $transactionId);
-		$getStatusService->setDemoMode();
+		$getStatusService = $this->createGetStatusService($transactionId);
 		$responseGetStatus = $client->sendRequest($getStatusService);
 		$getStatusResponse = new GetStatusResponse($client->getLastHttpCode(), $responseGetStatus);
 
@@ -135,5 +134,16 @@ class ChainCreateStatusTest extends IntegrationTestBase
 		$createDocumentService->addReceiptPosition($receiptPosition);
 		$createDocumentService->addTaxatitionSystem(new TaxatitionSystem(TaxatitionSystem::TAXATITION_SYSTEM_ENDV));
 		return $createDocumentService;
+	}
+
+	/**
+	 * @param $transactionId
+	 * @return GetStatusRequest
+	 */
+	private function createGetStatusService($transactionId)
+	{
+		$getStatusService = new GetStatusRequest($this->inn, $transactionId);
+		$getStatusService->setDemoMode();
+		return $getStatusService;
 	}
 }
