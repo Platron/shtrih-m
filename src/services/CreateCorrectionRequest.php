@@ -6,13 +6,13 @@ use Platron\Shtrihm\handbooks\CorrectionOperationTypes;
 use Platron\Shtrihm\handbooks\CorrectionType;
 use Platron\Shtrihm\handbooks\TaxationSystem;
 
-class CreateCorrectionDocument extends BaseServiceRequest
+class CreateCorrectionRequest extends BaseServiceRequest
 {
 
 	/** @var string */
 	protected $id;
 	/** @var int */
-	protected $inn;
+	protected $Inn;
 	/** @var integer */
 	protected $key;
 	/** @var string идентификатор группы ККТ */
@@ -25,6 +25,8 @@ class CreateCorrectionDocument extends BaseServiceRequest
 	protected $description;
 	/** @var string */
 	protected $causeDocumentDate;
+	/** @var string */
+	protected $causeDocumentNumber;
 	/** @var float */
 	protected $totalSum;
 	/** @var float */
@@ -79,7 +81,7 @@ class CreateCorrectionDocument extends BaseServiceRequest
 	 */
 	public function addInn($inn)
 	{
-		$this->inn = $inn;
+		$this->Inn = $inn;
 	}
 
 	/**
@@ -125,6 +127,14 @@ class CreateCorrectionDocument extends BaseServiceRequest
 	public function addCauseDocumentDate(\DateTime $dateTime)
 	{
 		$this->causeDocumentDate = $dateTime->format('Y-m-d H:i:s');
+	}
+
+	/**
+	 * @param $causeDocumentNumber
+	 */
+	public function addCauseDocumentNumber($causeDocumentNumber)
+	{
+		$this->causeDocumentNumber = $causeDocumentNumber;
 	}
 
 	/**
@@ -234,7 +244,7 @@ class CreateCorrectionDocument extends BaseServiceRequest
 	/**
 	 * @param string $automatNumber
 	 */
-	public function setAutomatNumber($automatNumber)
+	public function addAutomatNumber($automatNumber)
 	{
 		$this->automatNumber = $automatNumber;
 	}
@@ -242,7 +252,7 @@ class CreateCorrectionDocument extends BaseServiceRequest
 	/**
 	 * @param string $settlementAddress
 	 */
-	public function setSettlementAddress($settlementAddress)
+	public function addSettlementAddress($settlementAddress)
 	{
 		$this->settlementAddress = $settlementAddress;
 	}
@@ -250,19 +260,25 @@ class CreateCorrectionDocument extends BaseServiceRequest
 	/**
 	 * @param string $settlementPlace
 	 */
-	public function setSettlementPlace($settlementPlace)
+	public function addSettlementPlace($settlementPlace)
 	{
 		$this->settlementPlace = $settlementPlace;
 	}
 
 	function getParameters()
 	{
-		$fieldVars = array();
+		$fieldVars = [
+			'id' => $this->id,
+			'Inn' => $this->Inn,
+			'group' => $this->group,
+			'key' => $this->key,
+		];
 		foreach (get_object_vars($this) as $name => $value) {
-			if ($value) {
-				$fieldVars[$name] = $value;
+			if ($value && !isset($fieldVars[$name])) {
+				$fieldVars['content'][$name] = $value;
 			}
 		}
+
 		return $fieldVars;
 	}
 }

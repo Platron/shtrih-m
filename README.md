@@ -18,4 +18,4 @@ vendor/bin/phpunit tests/integration
 ```
 
 ## Примеры использования смотри в интеграционном тесте
-https://github.com/Platron/shtrih-m/blob/master/tests/integration/ChainCreateStatusTest.php
+https://github.com/Platron/shtrih-m/blob/master/tests/integration/

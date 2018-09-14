@@ -4,9 +4,8 @@ namespace Platron\Shtrihm\services;
 
 use stdClass;
 
-class GetStatusResponse extends BaseServiceResponse
+abstract class GetStatusResponse extends BaseServiceResponse
 {
-
 	const
 		HTTP_CODE_OK = 200,
 		HTTP_CODE_WAIT = 202;

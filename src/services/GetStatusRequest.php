@@ -2,7 +2,7 @@
 
 namespace Platron\Shtrihm\services;
 
-class GetStatusRequest extends BaseServiceRequest
+abstract class GetStatusRequest extends BaseServiceRequest
 {
 
 	/** @var int */
@@ -10,13 +10,6 @@ class GetStatusRequest extends BaseServiceRequest
 	/** @var int */
 	protected $inn;
 
-	/**
-	 * @inheritdoc
-	 */
-	public function getRequestUrl()
-	{
-		return $this->getBaseUrl() .'/documents/'. $this->inn . '/status/' . $this->id;
-	}
 
 	/**
 	 * @param int $inn ИНН

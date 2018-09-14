@@ -5,6 +5,7 @@ namespace Platron\Shtrihm\services;
 use Platron\Shtrihm\data_objects\Customer;
 use Platron\Shtrihm\data_objects\Payment;
 use Platron\Shtrihm\data_objects\ReceiptPosition;
+use Platron\Shtrihm\data_objects\Settlement;
 use Platron\Shtrihm\handbooks\OperationType;
 use Platron\Shtrihm\handbooks\TaxationSystem;
 
@@ -22,6 +23,8 @@ class CreateReceiptRequest extends BaseServiceRequest
 	protected $id;
 	/** @var Customer */
 	protected $customer;
+	/** @var Settlement */
+	protected $settlement;
 	/** @var int */
 	protected $inn;
 	/** @var ReceiptPosition[] Позиции в чеке */
@@ -60,6 +63,14 @@ class CreateReceiptRequest extends BaseServiceRequest
 	}
 
 	/**
+	 * @param Settlement $settlement
+	 */
+	public function addSettlement(Settlement $settlement)
+	{
+		$this->settlement = $settlement;
+	}
+
+	/**
 	 * @param type $inn
 	 */
 	public function addInn($inn)
@@ -84,11 +95,11 @@ class CreateReceiptRequest extends BaseServiceRequest
 	}
 
 	/**
-	 * @param TaxationSystem $taxatitionSystem
+	 * @param TaxationSystem $taxationSystem
 	 */
-	public function addTaxationSystem(TaxationSystem $taxatitionSystem)
+	public function addTaxationSystem(TaxationSystem $taxationSystem)
 	{
-		$this->taxationSystem = $taxatitionSystem->getValue();
+		$this->taxationSystem = $taxationSystem->getValue();
 	}
 
 	/**

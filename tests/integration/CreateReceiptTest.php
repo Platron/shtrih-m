@@ -8,6 +8,7 @@ use Platron\Shtrihm\data_objects\Agent;
 use Platron\Shtrihm\data_objects\Customer;
 use Platron\Shtrihm\data_objects\Payment;
 use Platron\Shtrihm\data_objects\ReceiptPosition;
+use Platron\Shtrihm\data_objects\Settlement;
 use Platron\Shtrihm\data_objects\Supplier;
 use Platron\Shtrihm\handbooks\AgentTypes;
 use Platron\Shtrihm\handbooks\OperationType;
@@ -18,26 +19,26 @@ use Platron\Shtrihm\handbooks\TaxationSystem;
 use Platron\Shtrihm\handbooks\Vates;
 use Platron\Shtrihm\services\CreateReceiptRequest;
 use Platron\Shtrihm\services\CreateReceiptResponse;
-use Platron\Shtrihm\services\GetStatusRequest;
-use Platron\Shtrihm\services\GetStatusResponse;
+use Platron\Shtrihm\services\GetReceiptStatusRequest;
+use Platron\Shtrihm\services\GetReceiptStatusResponse;
 
-class ChainCreateStatusTest extends IntegrationTestBase
+class CreateReceiptTest extends IntegrationTestBase
 {
-	public function testChainCreateStatus()
+	public function testCreateReceipt()
 	{
 		$transactionId = time();
-		$createDocumentService = $this->createDocumentService($transactionId);
+		$createReceiptRequest = $this->createReceiptRequest($transactionId);
 
 		$client = new PostClient($this->secretKeyPath, $this->keyPassword, $this->certPath, $this->signedKeyPath);
 		$client->setLogger(new TestLogger());
-		$responseCreate = $client->sendRequest($createDocumentService);
-		$createDocumentResponse = new CreateReceiptResponse($client->getLastHttpCode(), $responseCreate);
+		$responseCreate = $client->sendRequest($createReceiptRequest);
+		$createReceiptResponse = new CreateReceiptResponse($client->getLastHttpCode(), $responseCreate);
 
-		$this->assertTrue($createDocumentResponse->isValid());
+		$this->assertTrue($createReceiptResponse->isValid());
 
-		$getStatusService = $this->createGetStatusService($transactionId);
-		$responseGetStatus = $client->sendRequest($getStatusService);
-		$getStatusResponse = new GetStatusResponse($client->getLastHttpCode(), $responseGetStatus);
+		$getStatusRequest = $this->createGetReceiptStatusRequest($transactionId);
+		$responseGetStatus = $client->sendRequest($getStatusRequest);
+		$getStatusResponse = new GetReceiptStatusResponse($client->getLastHttpCode(), $responseGetStatus);
 
 		$this->assertTrue($getStatusResponse->isValid());
 	}
@@ -118,35 +119,45 @@ class ChainCreateStatusTest extends IntegrationTestBase
 	 * @param $transactionId
 	 * @return CreateReceiptRequest
 	 */
-	private function createDocumentService($transactionId)
+	private function createReceiptRequest($transactionId)
 	{
 		$agent = $this->createAgent();
 		$supplier = $this->createSupplier();
 		$receiptPosition = $this->createReceiptPosition($agent, $supplier);
 		$customer = $this->createCustomer();
 		$payment = $this->createPayment();
+		$settlement = $this->createSettlement();
 
-		$createDocumentService = new CreateReceiptRequest($transactionId);
-		$createDocumentService->setDemoMode();
-		$createDocumentService->addAdditionalAttribute('Test additional attribute');
-		$createDocumentService->addCustomer($customer);
-		$createDocumentService->addInn($this->inn);
-		$createDocumentService->addGroup($this->groupCode);
-		$createDocumentService->addOperationType(new OperationType(OperationType::SELL));
-		$createDocumentService->addPayment($payment);
-		$createDocumentService->addReceiptPosition($receiptPosition);
-		$createDocumentService->addTaxationSystem(new TaxationSystem(TaxationSystem::SYSTEM_ENDV));
-		return $createDocumentService;
+		$createReceiptRequest = new CreateReceiptRequest($transactionId);
+		$createReceiptRequest->setDemoMode();
+		$createReceiptRequest->addAdditionalAttribute('Test additional attribute');
+		$createReceiptRequest->addCustomer($customer);
+		$createReceiptRequest->addInn($this->inn);
+		$createReceiptRequest->addGroup($this->groupCode);
+		$createReceiptRequest->addOperationType(new OperationType(OperationType::SELL));
+		$createReceiptRequest->addPayment($payment);
+		$createReceiptRequest->addReceiptPosition($receiptPosition);
+		$createReceiptRequest->addTaxationSystem(new TaxationSystem(TaxationSystem::SYSTEM_ENDV));
+		$createReceiptRequest->addSettlement($settlement);
+		return $createReceiptRequest;
 	}
 
 	/**
 	 * @param $transactionId
-	 * @return GetStatusRequest
+	 * @return GetReceiptStatusRequest
 	 */
-	private function createGetStatusService($transactionId)
+	private function createGetReceiptStatusRequest($transactionId)
 	{
-		$getStatusService = new GetStatusRequest($this->inn, $transactionId);
-		$getStatusService->setDemoMode();
-		return $getStatusService;
+		$getReceiptStatusRequest = new GetReceiptStatusRequest($this->inn, $transactionId);
+		$getReceiptStatusRequest->setDemoMode();
+		return $getReceiptStatusRequest;
+	}
+
+	/**
+	 * @return Settlement
+	 */
+	private function createSettlement()
+	{
+		return new Settlement('Test address', 'Test place');
 	}
 }

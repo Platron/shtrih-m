@@ -2,7 +2,7 @@
 
 namespace Platron\Shtrihm\services;
 
-class CreateCorrectionResponse extends CreateReceiptRequest
+class CreateCorrectionResponse extends CreateDocumentResponse
 {
 
 }
