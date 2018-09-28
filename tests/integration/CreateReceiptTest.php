@@ -137,7 +137,7 @@ class CreateReceiptTest extends IntegrationTestBase
 		$createReceiptRequest->addOperationType(new OperationType(OperationType::SELL));
 		$createReceiptRequest->addPayment($payment);
 		$createReceiptRequest->addReceiptPosition($receiptPosition);
-		$createReceiptRequest->addTaxationSystem(new TaxationSystem(TaxationSystem::SYSTEM_ENDV));
+		$createReceiptRequest->addTaxationSystem(new TaxationSystem(TaxationSystem::ENDV));
 		$createReceiptRequest->addSettlement($settlement);
 		return $createReceiptRequest;
 	}
