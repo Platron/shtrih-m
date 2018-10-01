@@ -137,14 +137,18 @@ class ReceiptPosition extends BaseDataObject
 	{
 		$parameters = parent::getParameters();
 
-		unset($parameters['agent']);
-		$parameters['agentType'] = $this->agent->getType();
-		$parameters['agentInfo'] = $this->agent->getParameters();
+		if(!empty($parameters['agent'])) {
+			unset($parameters['agent']);
+			$parameters['agentType'] = $this->agent->getType();
+			$parameters['agentInfo'] = $this->agent->getParameters();
+		}
 
-		unset($parameters['supplier']);
-		$parameters['supplierINN'] = $this->supplier->getInn();
-		$parameters['supplierInfo'] = $this->supplier->getParameters();
-
+		if(!empty($parameters['supplier'])) {
+			unset($parameters['supplier']);
+			$parameters['supplierINN'] = $this->supplier->getInn();
+			$parameters['supplierInfo'] = $this->supplier->getParameters();
+		}
+		
 		return $parameters;
 	}
 }
