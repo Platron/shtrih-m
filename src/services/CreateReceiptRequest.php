@@ -162,11 +162,11 @@ class CreateReceiptRequest extends BaseServiceRequest
 		];
 
 		if ($this->customer) {
-			$params += $this->customer->getParameters();
+			$params['Content'] += $this->customer->getParameters();
 		}
 
 		if ($this->settlement) {
-			$params += $this->settlement->getParameters();
+			$params['Content'] += $this->settlement->getParameters();
 		}
 
 		return $params;
