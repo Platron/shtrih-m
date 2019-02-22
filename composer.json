@@ -5,7 +5,8 @@
         "php": ">=5.5",
         "psr/log": "1.0.2",
         "phpseclib/phpseclib": "^2.0",
-        "myclabs/php-enum": "^1.6"
+        "myclabs/php-enum": "^1.6",
+        "ext-curl": "^7.2"
     },
     "require-dev": {
 		"php": ">=5.6",
