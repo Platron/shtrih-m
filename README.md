@@ -1,5 +1,11 @@
 Platron Shtrih-m SDK
 ===============
+## BREAKING CHANGES !!!
+* Класс AdditionalAttribute переименован в AdditionalUserAttribute.
+* Свойство additionalAttribute из класса Customer перенесено в класс CreateReceiptRequest с названием additionalUserAttribute
+* Из класса Customer убраны свойства phone и email. Вместо этого в класс CreateReceiptRequest добавлено свойство customerContact
+
+
 ## Установка
 
 Проект предполагает через установку с использованием composer
