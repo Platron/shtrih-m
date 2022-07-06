@@ -3,7 +3,7 @@
 namespace Platron\Shtrihm\data_objects;
 
 
-class AdditionalAttribute extends BaseDataObject
+class AdditionalUserAttribute extends BaseDataObject
 {
 	/** @var string */
 	protected $name;

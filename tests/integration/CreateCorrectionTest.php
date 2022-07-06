@@ -40,6 +40,7 @@ class CreateCorrectionTest extends IntegrationTestBase
 		$createCorrectionRequest = new CreateCorrectionRequest($transactionId);
 		$createCorrectionRequest->setDemoMode();
 		$createCorrectionRequest->addInn($this->inn);
+		$createCorrectionRequest->addKey($this->inn);
 		$createCorrectionRequest->addGroup($this->groupCode);
 		$createCorrectionRequest->addCashSum(100);
 		$createCorrectionRequest->addCauseDocumentNumber('Test document number');

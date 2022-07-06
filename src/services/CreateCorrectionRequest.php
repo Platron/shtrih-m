@@ -12,7 +12,7 @@ class CreateCorrectionRequest extends BaseServiceRequest
 	/** @var string */
 	protected $id;
 	/** @var int */
-	protected $Inn;
+	protected $inn;
 	/** @var integer */
 	protected $key;
 	/** @var string идентификатор группы ККТ */
@@ -77,11 +77,11 @@ class CreateCorrectionRequest extends BaseServiceRequest
 	}
 
 	/**
-	 * @param type $inn
+	 * @param int $inn
 	 */
 	public function addInn($inn)
 	{
-		$this->Inn = $inn;
+		$this->inn = $inn;
 	}
 
 	/**
@@ -108,6 +108,9 @@ class CreateCorrectionRequest extends BaseServiceRequest
 		$this->correctionType = $correctionType->getValue();
 	}
 
+	/**
+	 * @param CorrectionOperationTypes $type
+	 */
 	public function addType(CorrectionOperationTypes $type)
 	{
 		$this->type = $type->getValue();
@@ -269,7 +272,7 @@ class CreateCorrectionRequest extends BaseServiceRequest
 	{
 		$fieldVars = [
 			'id' => $this->id,
-			'Inn' => $this->Inn,
+			'inn' => $this->inn,
 			'group' => $this->group,
 			'key' => $this->key,
 		];

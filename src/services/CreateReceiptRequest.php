@@ -2,27 +2,43 @@
 
 namespace Platron\Shtrihm\services;
 
+use Platron\Shtrihm\data_objects\AdditionalUserAttribute;
+use Platron\Shtrihm\data_objects\Barcode;
 use Platron\Shtrihm\data_objects\Customer;
+use Platron\Shtrihm\data_objects\OperationalAttribute;
 use Platron\Shtrihm\data_objects\Payment;
+use Platron\Shtrihm\data_objects\IndustryAttribute;
 use Platron\Shtrihm\data_objects\ReceiptPosition;
 use Platron\Shtrihm\data_objects\Settlement;
 use Platron\Shtrihm\handbooks\OperationType;
 use Platron\Shtrihm\handbooks\TaxationSystem;
+use Platron\Shtrihm\handbooks\FFDVersion;
 
 /**
  * Все парараметры обязательны для заполнения. Контактные данные требуются - либо email, либо телефон
  */
 class CreateReceiptRequest extends BaseServiceRequest
 {
-
+	/** @var int номер версии ФДД */
+	protected $ffdVersion;
 	/** @var string идентификатор группы ККТ */
 	protected $group;
+	/** @var string */
+	protected $meta;
 	/** @var string тип операции */
 	protected $operationType;
 	/** @var string */
 	protected $id;
+	/** @var string */
+	protected $customerContact;
 	/** @var Customer */
 	protected $customer;
+	/** @var OperationalAttribute */
+	protected $operationalAttribute;
+	/** @var  IndustryAttribute */
+	protected $industryAttribute;
+	/** @var Barcode */
+	protected $barcodes;
 	/** @var Settlement */
 	protected $settlement;
 	/** @var int */
@@ -37,13 +53,17 @@ class CreateReceiptRequest extends BaseServiceRequest
 	protected $key;
 	/** @var string */
 	protected $additionalAttribute;
+	/** @var AdditionalUserAttribute */
+	protected $additionalUserAttribute;
 
 	/**
 	 * @param int $id Идентификатор заказа
+	 * @param int $ffdVersion
 	 */
-	public function __construct($id)
+	public function __construct($id, $ffdVersion = FFDVersion::V1_05)
 	{
 		$this->id = $id;
+		$this->ffdVersion = $ffdVersion;
 	}
 
 	/**
@@ -51,7 +71,15 @@ class CreateReceiptRequest extends BaseServiceRequest
 	 */
 	public function getRequestUrl()
 	{
-		return $this->getBaseUrl().'/documents/';
+		return $this->getBaseUrl() . '/documents/';
+	}
+
+	/**
+	 * @param string $customerContact
+	 */
+	public function addCustomerContact($customerContact)
+	{
+		$this->customerContact = $customerContact;
 	}
 
 	/**
@@ -63,6 +91,30 @@ class CreateReceiptRequest extends BaseServiceRequest
 	}
 
 	/**
+	 * @param OperationalAttribute $operationalAttribute
+	 */
+	public function addOperationalAttribute($operationalAttribute)
+	{
+		$this->operationalAttribute = $operationalAttribute;
+	}
+
+	/**
+	 * @param IndustryAttribute $industryAttribute
+	 */
+	public function addIndustryAttribute($industryAttribute)
+	{
+		$this->industryAttribute = $industryAttribute;
+	}
+
+	/**
+	 * @param Barcode
+	 */
+	public function addBarcodes($barcodes)
+	{
+		$this->barcodes = $barcodes;
+	}
+
+	/**
 	 * @param Settlement $settlement
 	 */
 	public function addSettlement(Settlement $settlement)
@@ -71,7 +123,7 @@ class CreateReceiptRequest extends BaseServiceRequest
 	}
 
 	/**
-	 * @param type $inn
+	 * @param int $inn
 	 */
 	public function addInn($inn)
 	{
@@ -119,6 +171,14 @@ class CreateReceiptRequest extends BaseServiceRequest
 	}
 
 	/**
+	 * @param AdditionalUserAttribute $additionalUserAttribute
+	 */
+	public function addAdditionalUserAttribute(AdditionalUserAttribute $additionalUserAttribute)
+	{
+		$this->additionalUserAttribute = $additionalUserAttribute;
+	}
+
+	/**
 	 * @param string $group Идентификатор группы ККТ
 	 */
 	public function addGroup($group)
@@ -134,6 +194,22 @@ class CreateReceiptRequest extends BaseServiceRequest
 		$this->key = $key;
 	}
 
+	/**
+	 * @param string $meta
+	 */
+	public function addMeta($meta)
+	{
+		$this->meta = $meta;
+	}
+
+	/**
+	 * @param bool $ignoreItemCodeCheck
+	 */
+	public function addIgnoreItemCodeCheck($ignoreItemCodeCheck)
+	{
+		$this->ignoreItemCodeCheck = $ignoreItemCodeCheck;
+	}
+
 	public function getParameters()
 	{
 		$items = [];
@@ -146,27 +222,52 @@ class CreateReceiptRequest extends BaseServiceRequest
 		}
 
 		$params = [
-			'Id' => $this->id,
-			'INN' => $this->inn,
+			'id' => $this->id,
+			'inn' => $this->inn,
 			'key' => $this->key,
-			'Group' => $this->group,
-			'additionalAttribute' => $this->additionalAttribute,
-			'Content' => [
-				'Type' => $this->operationType,
-				'Positions' => $items,
-				'CheckClose' => [
-					'Payments' => $payments,
-					'TaxationSystem' => $this->taxationSystem,
+			'group' => $this->group,
+			'meta' => $this->meta,
+			'content' => [
+				'ffdVersion' => $this->ffdVersion,
+				'type' => $this->operationType,
+				'positions' => $items,
+				'checkClose' => [
+					'payments' => $payments,
+					'taxationSystem' => $this->taxationSystem,
 				],
+				'customerContact' => $this->customerContact,
+				'additionalAttribute' => $this->additionalAttribute,
 			],
 		];
 
-		if ($this->customer) {
-			$params['Content'] += $this->customer->getParameters();
+
+		if ($this->additionalUserAttribute) {
+			$params['content']['additionalUserAttribute'] = $this->additionalUserAttribute->getParameters();
+		}
+
+		if ($this->ffdVersion === FFDVersion::V1_2) {
+
+			if ($this->customer) {
+				$params['content']['customerInfo'] = $this->customer->getParameters();
+			}
+
+			if ($this->operationalAttribute) {
+				$params['content']['operationalAttribute'] = $this->operationalAttribute->getParameters();
+			}
+
+			if ($this->industryAttribute) {
+				$params['content']['industryAttribute'] = $this->industryAttribute->getParameters();
+			}
+
+		} else {
+
+			if ($this->customer) {
+				$params['content'] += $this->customer->getParameters();
+			}
 		}
 
 		if ($this->settlement) {
-			$params['Content'] += $this->settlement->getParameters();
+			$params['content'] += $this->settlement->getParameters();
 		}
 
 		return $params;

@@ -10,13 +10,13 @@ class ReceiptPosition extends BaseDataObject
 {
 
 	/** @var string */
-	protected $Tax;
+	protected $tax;
 	/** @var string */
-	protected $Text;
+	protected $text;
 	/** @var float */
-	protected $Price;
+	protected $price;
 	/** @var int */
-	protected $Quantity;
+	protected $quantity;
 	/** @var string */
 	protected $paymentMethodType;
 	/** @var string */
@@ -37,6 +37,20 @@ class ReceiptPosition extends BaseDataObject
 	protected $agent;
 	/** @var Supplier */
 	protected $supplier;
+	/** @var FractionalQuantity */
+	protected $fractionalQuantity;
+	/** @var IndustryAttribute */
+	protected $industryAttribute;
+	/** @var Barcode */
+	protected $barcodes;
+	/** @var float */
+	protected $unitTaxSum;
+	/** @var int */
+	protected $quantityMeasurementUnit;
+	/** @var string */
+	protected $itemCode;
+	/** @var int */
+	protected $plannedStatus;
 
 	/**
 	 * @param string $name Описание товара
@@ -46,10 +60,10 @@ class ReceiptPosition extends BaseDataObject
 	 */
 	public function __construct($name, $price, $quantity, Vates $vat)
 	{
-		$this->Text = $name;
-		$this->Price = $price;
-		$this->Quantity = $quantity;
-		$this->Tax = $vat->getValue();
+		$this->text = $name;
+		$this->price = $price;
+		$this->quantity = $quantity;
+		$this->tax = $vat->getValue();
 	}
 
 	/**
@@ -133,6 +147,62 @@ class ReceiptPosition extends BaseDataObject
 		$this->supplier = $supplier;
 	}
 
+	/**
+	 * @param FractionalQuantity $fractionalQuantity
+	 */
+	public function addFractionalQuantity(FractionalQuantity $fractionalQuantity)
+	{
+		$this->fractionalQuantity = $fractionalQuantity;
+	}
+
+	/**
+	 * @param IndustryAttribute $industryAttribute
+	 */
+	public function addIndustryAttribute(IndustryAttribute $industryAttribute)
+	{
+		$this->industryAttribute = $industryAttribute;
+	}
+
+	/**
+	 * @param Barcode $barcodes
+	 */
+	public function addBarcodes($barcodes)
+	{
+		$this->barcodes = $barcodes;
+	}
+
+	/**
+	 * @param float $unitTaxSum
+	 */
+	public function addUnitTaxSum($unitTaxSum)
+	{
+		$this->unitTaxSum = (float)$unitTaxSum;
+	}
+
+	/**
+	 * @param int $quantityMeasurementUnit
+	 */
+	public function addQuantityMeasurementUnit($quantityMeasurementUnit)
+	{
+		$this->quantityMeasurementUnit = (int)$quantityMeasurementUnit;
+	}
+
+	/**
+	 * @param string $itemCode
+	 */
+	public function addItemCode($itemCode)
+	{
+		$this->itemCode = (string)$itemCode;
+	}
+
+	/**
+	 * @return int $plannedStatus
+	 */
+	public function addPlannedStatus($plannedStatus)
+	{
+		$this->plannedStatus = (int)$plannedStatus;
+	}
+
 	public function getParameters()
 	{
 		$parameters = parent::getParameters();
@@ -148,7 +218,6 @@ class ReceiptPosition extends BaseDataObject
 			$parameters['supplierINN'] = $this->supplier->getInn();
 			$parameters['supplierInfo'] = $this->supplier->getParameters();
 		}
-		
 		return $parameters;
 	}
 }
