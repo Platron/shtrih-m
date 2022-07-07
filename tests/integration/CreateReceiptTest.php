@@ -131,7 +131,8 @@ class CreateReceiptTest extends IntegrationTestBase
 		$createReceiptRequest->setDemoMode();
 		$createReceiptRequest->addAdditionalAttribute('Test');
 		$createReceiptRequest->addAdditionalUserAttribute(new AdditionalUserAttribute('Additional name', 'Additional value'));
-		$createReceiptRequest->addCustomerContact('test@test.ru');
+		$createReceiptRequest->addPhone('79150000004');
+		$createReceiptRequest->addEmail('test@test.ru');
 		$createReceiptRequest->addCustomer($customer);
 		$createReceiptRequest->addInn($this->inn);
 		$createReceiptRequest->addGroup($this->groupCode);

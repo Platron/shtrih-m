@@ -30,7 +30,9 @@ class CreateReceiptRequest extends BaseServiceRequest
 	/** @var string */
 	protected $id;
 	/** @var string */
-	protected $customerContact;
+	protected $phone;
+	/** @var string */
+	protected $email;
 	/** @var Customer */
 	protected $customer;
 	/** @var OperationalAttribute */
@@ -73,13 +75,20 @@ class CreateReceiptRequest extends BaseServiceRequest
 	{
 		return $this->getBaseUrl() . '/documents/';
 	}
+	/**
+	 * @param $phone
+	 */
+	public function addPhone($phone)
+	{
+		$this->phone = $phone;
+	}
 
 	/**
-	 * @param string $customerContact
+	 * @param $email
 	 */
-	public function addCustomerContact($customerContact)
+	public function addEmail($email)
 	{
-		$this->customerContact = $customerContact;
+		$this->email = $email;
 	}
 
 	/**
@@ -235,7 +244,7 @@ class CreateReceiptRequest extends BaseServiceRequest
 					'payments' => $payments,
 					'taxationSystem' => $this->taxationSystem,
 				],
-				'customerContact' => $this->customerContact,
+				'customerContact' => $this->email ?: $this->phone,
 				'additionalAttribute' => $this->additionalAttribute,
 			],
 		];
