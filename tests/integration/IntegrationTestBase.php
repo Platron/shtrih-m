@@ -2,7 +2,9 @@
 
 namespace Platron\Shtrihm\tests\integration;
 
-class IntegrationTestBase extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class IntegrationTestBase extends TestCase
 {
 
 	/** @var int */
@@ -18,7 +20,7 @@ class IntegrationTestBase extends \PHPUnit_Framework_TestCase
 	/** @var string Путь до сертифката */
 	protected $certPath;
 
-	public function __construct()
+	protected function setUp(): void
 	{
 		$this->inn = MerchantSettings::INN;
 		$this->groupCode = MerchantSettings::GROUP_CODE;

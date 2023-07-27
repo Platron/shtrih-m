@@ -17,3 +17,5 @@ composer.phar
 /tests/integration/MerchantSettings.php
 /tests/integration/merchant_data/*
 !/tests/integration/merchant_data/.gitignore
+
+.phpunit.result.cache

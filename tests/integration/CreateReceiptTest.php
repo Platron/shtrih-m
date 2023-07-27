@@ -65,7 +65,7 @@ class CreateReceiptTest extends IntegrationTestBase
 	 */
 	private function createSupplier()
 	{
-		$supplier = new Supplier('0987654321', 'Test supplier');
+		$supplier = new Supplier('7707083893', 'Test supplier');
 		$supplier->addPhone('79150000005');
 		$supplier->addPhone('79150000006');
 		return $supplier;
@@ -84,7 +84,7 @@ class CreateReceiptTest extends IntegrationTestBase
 		$receiptPosition->addCustomsDeclarationNumber('Test custom declaration');
 		$receiptPosition->addExcise(100.00);
 		$receiptPosition->addManufacturerCountryCode(643);
-		$receiptPosition->addNomenclatureCode('Test nomenclature code');
+		$receiptPosition->addNomenclatureCode(null);
 		$receiptPosition->addPaymentMethodType(new PaymentMethodType(PaymentMethodType::FULL_PAYMENT));
 		$receiptPosition->addPaymentSubjectType(new PaymentSubjectType(PaymentSubjectType::PRODUCT));
 		$receiptPosition->addSupplier($supplier);
@@ -100,7 +100,7 @@ class CreateReceiptTest extends IntegrationTestBase
 		$customer = new Customer();
 		$customer->addPhone('79150000004');
 		$customer->addEmail('test@test.ru');
-		$customer->addInn('1234512345');
+		$customer->addInn('7707083893');
 		$customer->addName('Name Surname');
 		$customer->addAdditionalAttribute(new AdditionalAttribute('Additional name', 'Additional value'));
 		return $customer;
@@ -111,7 +111,7 @@ class CreateReceiptTest extends IntegrationTestBase
 	 */
 	private function createPayment()
 	{
-		$payment = new Payment(new PaymentType(PaymentType::MASTERCARD), 200.00);
+		$payment = new Payment(new PaymentType(PaymentType::ELECTRON), 200.00);
 		return $payment;
 	}
 
@@ -137,7 +137,7 @@ class CreateReceiptTest extends IntegrationTestBase
 		$createReceiptRequest->addOperationType(new OperationType(OperationType::SELL));
 		$createReceiptRequest->addPayment($payment);
 		$createReceiptRequest->addReceiptPosition($receiptPosition);
-		$createReceiptRequest->addTaxationSystem(new TaxationSystem(TaxationSystem::ENDV));
+		$createReceiptRequest->addTaxationSystem(new TaxationSystem(TaxationSystem::OSN));
 		$createReceiptRequest->addSettlement($settlement);
 		return $createReceiptRequest;
 	}
