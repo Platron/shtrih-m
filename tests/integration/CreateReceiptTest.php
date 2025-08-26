@@ -6,6 +6,8 @@ use Platron\Shtrihm\clients\PostClient;
 use Platron\Shtrihm\data_objects\AdditionalAttribute;
 use Platron\Shtrihm\data_objects\Agent;
 use Platron\Shtrihm\data_objects\Customer;
+use Platron\Shtrihm\data_objects\ElectronicPayment;
+use Platron\Shtrihm\data_objects\ElectronicPaymentsInfo;
 use Platron\Shtrihm\data_objects\Payment;
 use Platron\Shtrihm\data_objects\ReceiptPosition;
 use Platron\Shtrihm\data_objects\Settlement;
@@ -36,11 +38,13 @@ class CreateReceiptTest extends IntegrationTestBase
 
 		$this->assertTrue($createReceiptResponse->isValid());
 
+		sleep(3);
 		$getStatusRequest = $this->createGetReceiptStatusRequest($transactionId);
 		$responseGetStatus = $client->sendRequest($getStatusRequest);
 		$getStatusResponse = new GetReceiptStatusResponse($client->getLastHttpCode(), $responseGetStatus);
 
 		$this->assertTrue($getStatusResponse->isValid());
+		$this->assertEquals(GetReceiptStatusResponse::STATUS_DONE, $getStatusResponse->status);
 	}
 
 	/**
@@ -127,6 +131,7 @@ class CreateReceiptTest extends IntegrationTestBase
 		$customer = $this->createCustomer();
 		$payment = $this->createPayment();
 		$settlement = $this->createSettlement();
+		$electronicPaymentsInfo = $this->createElectronicPaymentsInfo();
 
 		$createReceiptRequest = new CreateReceiptRequest($transactionId);
 		$createReceiptRequest->setDemoMode();
@@ -139,6 +144,9 @@ class CreateReceiptTest extends IntegrationTestBase
 		$createReceiptRequest->addReceiptPosition($receiptPosition);
 		$createReceiptRequest->addTaxationSystem(new TaxationSystem(TaxationSystem::OSN));
 		$createReceiptRequest->addSettlement($settlement);
+		$createReceiptRequest->addIsInternetStore(true);
+		$createReceiptRequest->addElectronicPaymentsInfo($electronicPaymentsInfo);
+
 		return $createReceiptRequest;
 	}
 
@@ -159,5 +167,12 @@ class CreateReceiptTest extends IntegrationTestBase
 	private function createSettlement()
 	{
 		return new Settlement('Test address', 'Test place');
+	}
+
+	private function createElectronicPaymentsInfo()
+	{
+		$payment = new ElectronicPayment(200, 1, 'random_id');
+		$info = new ElectronicPaymentsInfo([$payment]);
+		return $info;
 	}
 }

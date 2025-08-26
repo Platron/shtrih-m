@@ -3,6 +3,7 @@
 namespace Platron\Shtrihm\services;
 
 use Platron\Shtrihm\data_objects\Customer;
+use Platron\Shtrihm\data_objects\ElectronicPaymentsInfo;
 use Platron\Shtrihm\data_objects\Payment;
 use Platron\Shtrihm\data_objects\ReceiptPosition;
 use Platron\Shtrihm\data_objects\Settlement;
@@ -37,6 +38,10 @@ class CreateReceiptRequest extends BaseServiceRequest
 	protected $key;
 	/** @var string */
 	protected $additionalAttribute;
+	/** @var boolean */
+	protected $isInternetStore;
+	/** @var ElectronicPaymentsInfo */
+	protected $electronicPaymentsInfo;
 
 	/**
 	 * @param int $id Идентификатор заказа
@@ -134,6 +139,16 @@ class CreateReceiptRequest extends BaseServiceRequest
 		$this->key = $key;
 	}
 
+	public function addIsInternetStore(bool $isInternetStore): void
+	{
+		$this->isInternetStore = $isInternetStore;
+	}
+
+	public function addElectronicPaymentsInfo(ElectronicPaymentsInfo $electronicPaymentsInfo): void
+	{
+		$this->electronicPaymentsInfo = $electronicPaymentsInfo;
+	}
+
 	public function getParameters()
 	{
 		$items = [];
@@ -158,6 +173,7 @@ class CreateReceiptRequest extends BaseServiceRequest
 					'Payments' => $payments,
 					'TaxationSystem' => $this->taxationSystem,
 				],
+				'isInternetStore' => $this->isInternetStore,
 			],
 		];
 
@@ -167,6 +183,10 @@ class CreateReceiptRequest extends BaseServiceRequest
 
 		if ($this->settlement) {
 			$params['Content'] += $this->settlement->getParameters();
+		}
+
+		if ($this->electronicPaymentsInfo) {
+			$params['Content']['CheckClose']['ElectronicPaymentsInfo'] = $this->electronicPaymentsInfo->getParameters();
 		}
 
 		return $params;
